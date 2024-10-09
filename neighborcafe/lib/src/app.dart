@@ -7,6 +7,9 @@ import 'sample_feature/sample_item_list_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 import 'settings/app_colors.dart'; // Importa el archivo de colores
+import 'views/login_view.dart'; // Importa el archivo de colores
+import 'views/register_view.dart'; // Importa el archivo de colores
+import 'views/welcome_screen.dart'; // Importa el archivo de colores
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -97,9 +100,18 @@ class MyApp extends StatelessWidget {
             ),
           ),
 
+          initialRoute: 'welcome_screen',
+          // home: RegisterView(),
+          routes: {
+            'registration_screen': (context) => RegisterView(),
+            'login_screen': (context) => LoginView(),
+            'welcome_screen': (context) => const WelcomeScreen(),
+            'home_screen': (context) => const SampleItemListView(),
+          },
+
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
-          onGenerateRoute: (RouteSettings routeSettings) {
+          /* onGenerateRoute: (RouteSettings routeSettings) {
             return MaterialPageRoute<void>(
               settings: routeSettings,
               builder: (BuildContext context) {
@@ -114,7 +126,7 @@ class MyApp extends StatelessWidget {
                 }
               },
             );
-          },
+          }, */
         );
       },
     );

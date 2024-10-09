@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "850733828801",
+    "project_id": "neighbor-cafe",
+    "storage_bucket": "neighbor-cafe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:850733828801:android:b9d9e6761cdccb61146240",
+        "android_client_info": {
+          "package_name": "com.neighborcafe.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCunPS6OS1XRiKp5pDyZwFzoGBNVVdvXDI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
