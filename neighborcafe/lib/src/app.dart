@@ -10,6 +10,7 @@ import 'settings/app_colors.dart'; // Importa el archivo de colores
 import 'views/login_view.dart'; // Importa el archivo de colores
 import 'views/register_view.dart'; // Importa el archivo de colores
 import 'views/welcome_screen.dart'; // Importa el archivo de colores
+import 'views/home_screen.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -106,7 +107,7 @@ class MyApp extends StatelessWidget {
             'registration_screen': (context) => RegisterView(),
             'login_screen': (context) => LoginView(),
             'welcome_screen': (context) => const WelcomeScreen(),
-            'home_screen': (context) => const SampleItemListView(),
+            'home_screen': (context) => HomePage(),
           },
 
           // Define a function to handle named routes in order to support

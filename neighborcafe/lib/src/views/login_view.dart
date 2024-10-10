@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:neighborcafe/src/settings/app_colors.dart';
 import '../components/rounded_button.dart';
+import './home_screen.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -43,6 +44,7 @@ class _LoginViewState extends State<LoginView> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
@@ -65,17 +67,6 @@ class _LoginViewState extends State<LoginView> {
           ],
         ),
       ),
-    );
-  }
-}
-
-// Asegúrate de crear una clase HomePage para redirigir después de iniciar sesión.
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Página Principal')),
-      body: Center(child: const Text('Bienvenido a la aplicación!')),
     );
   }
 }

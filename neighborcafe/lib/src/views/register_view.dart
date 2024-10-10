@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:neighborcafe/src/settings/app_colors.dart';
 import '../components/rounded_button.dart';
+import './home_screen.dart';
 
 class RegisterView extends StatefulWidget {
   @override
@@ -24,7 +25,12 @@ class _RegisterViewState extends State<RegisterView> {
       // Si el registro es exitoso, puedes redirigir al usuario a otra vista o pantalla
       // Por ejemplo, puedes usar Navigator.pushReplacement(...)
       // Ejemplo de redirección exitosa
-      Navigator.pushReplacementNamed(context, '/');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                HomePage()), // Cambia HomePage() por tu vista principal
+      );
     } on FirebaseAuthException catch (e) {
       setState(() {
         _errorMessage = e.message ?? 'Error desconocido';
@@ -39,6 +45,7 @@ class _RegisterViewState extends State<RegisterView> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
