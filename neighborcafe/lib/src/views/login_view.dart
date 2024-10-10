@@ -26,9 +26,7 @@ class _LoginViewState extends State<LoginView> {
       // Por ejemplo, puedes usar Navigator.pushReplacement(...)
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-            builder: (context) =>
-                HomePage()), // Cambia HomePage() por tu vista principal
+        MaterialPageRoute(builder: (context) => HomePage()),
       );
     } on FirebaseAuthException catch (e) {
       setState(() {
