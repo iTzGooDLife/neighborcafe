@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:neighborcafe/src/settings/app_colors.dart';
 import '../components/rounded_button.dart';
+import '../components/rounded_text.dart';
 import './home_screen.dart';
 
 class RegisterView extends StatefulWidget {
@@ -13,7 +15,34 @@ class _RegisterViewState extends State<RegisterView> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   String _errorMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Agrega listeners para limpiar el mensaje de error
+    _emailController.addListener(_clearErrorMessage);
+    _passwordController.addListener(_clearErrorMessage);
+    _nameController.addListener(_clearErrorMessage);
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  void _clearErrorMessage() {
+    if (_errorMessage.isNotEmpty) {
+      setState(() {
+        _errorMessage = '';
+      });
+    }
+  }
 
   Future<void> _register() async {
     try {
@@ -22,14 +51,22 @@ class _RegisterViewState extends State<RegisterView> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-      // Si el registro es exitoso, puedes redirigir al usuario a otra vista o pantalla
-      // Por ejemplo, puedes usar Navigator.pushReplacement(...)
-      // Ejemplo de redirección exitosa
-      Navigator.pushReplacement(
+
+      if (userCredential.user != null) {
+        // Guardar el nombre y el correo en Firestore
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .set({
+          'name': _nameController.text.trim(),
+          'email': _emailController.text.trim(),
+        });
+      }
+
+      Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(
-            builder: (context) =>
-                HomePage()), // Cambia HomePage() por tu vista principal
+        MaterialPageRoute(builder: (context) => HomePage()),
+        (Route<dynamic> route) => false, // Eliminar todas las rutas anteriores
       );
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -41,27 +78,44 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Registrar')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: _emailController,
-              decoration:
-                  const InputDecoration(labelText: 'Correo electrónico'),
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Contraseña'),
-              obscureText: true,
+            const SizedBox(height: 20),
+            const Text(
+              'Registrarse',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 20),
+            RoundedTextField(
+                hintText: 'Nombre de usuario',
+                controller: _nameController,
+                backgroundColor: AppColors.backgroundColor,
+                textColor: Colors.black,
+                obscureText: false),
+            RoundedTextField(
+                hintText: 'Correo electrónico',
+                controller: _emailController,
+                backgroundColor: AppColors.backgroundColor,
+                textColor: Colors.black,
+                obscureText: false),
+            RoundedTextField(
+                hintText: 'Contraseña',
+                controller: _passwordController,
+                backgroundColor: AppColors.backgroundColor,
+                textColor: Colors.black,
+                obscureText: true),
+            const SizedBox(height: 20),
             RoundedButton(
-                colour: AppColors.primaryColor,
-                title: 'Register',
+                colour: AppColors.secondaryColor,
+                title: 'Registrarse',
                 onPressed: _register),
             if (_errorMessage.isNotEmpty)
               Text(_errorMessage, style: const TextStyle(color: Colors.red)),

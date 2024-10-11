@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:neighborcafe/src/settings/app_colors.dart';
 import '../components/rounded_button.dart';
+import '../components/rounded_text.dart';
 import './home_screen.dart';
 
 class LoginView extends StatefulWidget {
@@ -22,11 +23,10 @@ class _LoginViewState extends State<LoginView> {
         password: _passwordController.text.trim(),
       );
 
-      // Si el login es exitoso, redirige al usuario a otra vista o pantalla
-      // Por ejemplo, puedes usar Navigator.pushReplacement(...)
-      Navigator.pushReplacement(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
+        (Route<dynamic> route) => false, // Eliminar todas las rutas anteriores
       );
     } on FirebaseAuthException catch (e) {
       setState(() {
@@ -38,26 +38,37 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Iniciar Sesión')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextField(
-              controller: _emailController,
-              decoration:
-                  const InputDecoration(labelText: 'Correo electrónico'),
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Contraseña'),
-              obscureText: true,
+            const SizedBox(height: 20),
+            const Text(
+              'Iniciar Sesión',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 20),
+            RoundedTextField(
+                hintText: 'Correo electrónico',
+                controller: _emailController,
+                backgroundColor: AppColors.backgroundColor,
+                textColor: Colors.black,
+                obscureText: false),
+            RoundedTextField(
+                hintText: 'Contraseña',
+                controller: _passwordController,
+                backgroundColor: AppColors.backgroundColor,
+                textColor: Colors.black,
+                obscureText: true),
+            const SizedBox(height: 20),
             RoundedButton(
-                colour: AppColors.primaryColor,
+                colour: AppColors.secondaryColor,
                 title: 'Iniciar Sesión',
                 onPressed: _login),
             if (_errorMessage.isNotEmpty)
