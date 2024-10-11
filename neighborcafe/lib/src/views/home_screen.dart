@@ -72,7 +72,12 @@ class _HomeScreenState extends State<HomePage> {
             onPressed: _logout,
           ),
         ],
-        title: const Text('Página de inicio'),
+        title: const Text('Página de inicio',
+            style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Roboto',
+                fontSize: 20,
+                fontWeight: FontWeight.bold)),
         backgroundColor: AppColors.primaryColor,
       ),
       body: Padding(
