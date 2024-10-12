@@ -63,10 +63,10 @@ class _RegisterViewState extends State<RegisterView> {
         });
       }
 
-      Navigator.pushAndRemoveUntil(
+      Navigator.pushNamedAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-        (Route<dynamic> route) => false, // Eliminar todas las rutas anteriores
+        'home_screen', // Nombre de la ruta
+        (Route<dynamic> route) => false, // Elimina todas las rutas anteriores
       );
     } on FirebaseAuthException catch (e) {
       setState(() {
