@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:neighborcafe/src/views/welcome_screen.dart';
 import '../settings/app_colors.dart';
+import '../components/bottom_navigation_bar.dart'; // Asegúrate de importar el widget
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,6 +16,7 @@ class _HomeScreenState extends State<HomePage> {
   final _firestore = FirebaseFirestore.instance;
   User? loggedinUser; // Cambia a User? para permitir valores nulos
   String? username;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -51,14 +52,8 @@ class _HomeScreenState extends State<HomePage> {
     }
   }
 
-  void _logout() async {
-    await _auth.signOut();
-    // Usar pushAndRemoveUntil para eliminar toda la pila de navegación y redirigir al login
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const WelcomeScreen()),
-      (Route<dynamic> route) => false, // Eliminar toda la pila
-    );
+  void _goToConfig() async {
+    Navigator.pushNamed(context, 'settings_screen');
   }
 
   @override
@@ -68,8 +63,8 @@ class _HomeScreenState extends State<HomePage> {
         leading: null,
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _logout,
+            icon: const Icon(Icons.settings),
+            onPressed: _goToConfig,
           ),
         ],
         title: const Text('Página de inicio',
@@ -89,6 +84,10 @@ class _HomeScreenState extends State<HomePage> {
             style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
           ),
         ]),
+      ),
+      bottomNavigationBar: BottomNavBar(
+        selectedIndex: _selectedIndex,
+        context: context,
       ),
     );
   }
