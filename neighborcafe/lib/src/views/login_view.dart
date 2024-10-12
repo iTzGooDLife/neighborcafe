@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:neighborcafe/src/settings/app_colors.dart';
 import '../components/rounded_button.dart';
 import '../components/rounded_text.dart';
-import './home_screen.dart';
+import '../services/routes.dart';
+import 'package:provider/provider.dart';
+import '../services/auth_service.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -11,12 +13,11 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String _errorMessage = '';
 
-  Future<void> _login() async {
+  /* Future<void> _login() async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
@@ -25,12 +26,40 @@ class _LoginViewState extends State<LoginView> {
 
       Navigator.pushNamedAndRemoveUntil(
         context,
-        'home_screen', // Nombre de la ruta
+        AppRoutes.home, // Nombre de la ruta
         (Route<dynamic> route) => false, // Elimina todas las rutas anteriores
       );
     } on FirebaseAuthException catch (e) {
       setState(() {
         _errorMessage = e.message ?? 'Error desconocido';
+      });
+    }
+  }
+*/
+
+  Future<void> _login() async {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      setState(() {
+        _errorMessage = 'Por favor, complete todos los campos.';
+      });
+      return;
+    }
+
+    try {
+      await context.read<AuthService>().signIn(
+            _emailController.text.trim(),
+            _passwordController.text.trim(),
+          );
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.home,
+        (Route<dynamic> route) => false,
+      );
+    } catch (e) {
+      setState(() {
+        _errorMessage = e is FirebaseAuthException
+            ? e.message ?? 'Error desconocido'
+            : 'Error al iniciar sesión';
       });
     }
   }

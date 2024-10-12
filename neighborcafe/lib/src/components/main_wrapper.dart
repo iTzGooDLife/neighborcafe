@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'bottom_navigation_bar.dart';
+import '../services/routes.dart';
 
 class MainScreenWrapper extends StatefulWidget {
   final List<Widget> screens;
@@ -33,7 +34,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, 'home_screen');
+                Navigator.pushNamed(context, AppRoutes.home);
               },
               child: Image.asset(
                 'assets/images/cafeIcon.png', // Replace with your image path
@@ -47,7 +48,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () => Navigator.pushNamed(context, 'settings_screen'),
+            onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neighborcafe/src/settings/app_colors.dart';
 import '../components/rounded_button.dart';
+import '../services/routes.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -29,14 +30,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   colour: AppColors.primaryColor,
                   title: 'Iniciar Sesión',
                   onPressed: () {
-                    Navigator.pushNamed(context, 'login_screen');
+                    Navigator.pushNamed(context, AppRoutes.login);
                   },
                 ),
                 RoundedButton(
                     colour: AppColors.secondaryColor,
                     title: 'Registrarse',
                     onPressed: () {
-                      Navigator.pushNamed(context, 'registration_screen');
+                      Navigator.pushNamed(context, AppRoutes.register);
                     }),
               ]),
         ));

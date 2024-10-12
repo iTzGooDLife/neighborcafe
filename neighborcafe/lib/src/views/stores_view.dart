@@ -14,7 +14,6 @@ class _StoresViewState extends State<StoresView> {
   final _firestore = FirebaseFirestore.instance;
   User? loggedinUser; // Cambia a User? para permitir valores nulos
   String? username;
-  int _selectedIndex = 0;
 
   @override
   void initState() {

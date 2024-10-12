@@ -14,7 +14,6 @@ class _ReviewStoreViewState extends State<ReviewStoreView> {
   final _firestore = FirebaseFirestore.instance;
   User? loggedinUser; // Cambia a User? para permitir valores nulos
   String? username;
-  int _selectedIndex = 0;
 
   @override
   void initState() {

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:neighborcafe/src/settings/app_colors.dart';
 import '../components/rounded_button.dart';
 import '../components/rounded_text.dart';
-import './home_screen.dart';
+import '../services/routes.dart';
+import 'package:provider/provider.dart';
+import '../services/auth_service.dart';
 
 class RegisterView extends StatefulWidget {
+  const RegisterView({super.key});
+
   @override
   _RegisterViewState createState() => _RegisterViewState();
 }
 
 class _RegisterViewState extends State<RegisterView> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -44,7 +46,7 @@ class _RegisterViewState extends State<RegisterView> {
     }
   }
 
-  Future<void> _register() async {
+  /* Future<void> _register() async {
     try {
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
@@ -71,6 +73,34 @@ class _RegisterViewState extends State<RegisterView> {
     } on FirebaseAuthException catch (e) {
       setState(() {
         _errorMessage = e.message ?? 'Error desconocido';
+      });
+    }
+  }
+*/
+
+  Future<void> _register() async {
+    if (_nameController.text.isEmpty ||
+        _emailController.text.isEmpty ||
+        _passwordController.text.isEmpty) {
+      setState(() {
+        _errorMessage = 'Por favor, complete todos los campos.';
+      });
+      return;
+    }
+
+    try {
+      await context.read<AuthService>().register(
+            _emailController.text.trim(),
+            _passwordController.text.trim(),
+          );
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.home,
+        (Route<dynamic> route) => false,
+      );
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
       });
     }
   }

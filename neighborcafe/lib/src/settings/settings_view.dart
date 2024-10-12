@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'settings_controller.dart';
+import '../services/routes.dart';
 
 /// Displays the various settings that can be customized by the user.
 ///
@@ -79,7 +80,7 @@ class SettingsView extends StatelessWidget {
 
       Navigator.pushNamedAndRemoveUntil(
         context,
-        'auth_wrapper', // Nombre de la ruta
+        AppRoutes.welcome, // Nombre de la ruta
         (Route<dynamic> route) => false, // Elimina todas las rutas anteriores
       );
     } catch (e) {
