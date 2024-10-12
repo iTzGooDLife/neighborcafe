@@ -1,0 +1,15 @@
+import java.util.Properties
+
+def propertiesFile = new File(rootProject.projectDir.parentFile, ".env")
+def Properties properties = new Properties()
+
+if (propertiesFile.exists()) {
+    propertiesFile.withInputStream { stream ->
+        properties.load(stream)
+    }
+    properties.each { key, value ->
+        project.ext.set(key, value)
+    }
+} else {
+    throw new GradleException("Looking for .env file at: ${propertiesFile.absolutePath}")
+}

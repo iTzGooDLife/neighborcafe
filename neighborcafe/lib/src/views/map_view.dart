@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/routes.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import 'dart:convert';
+import 'dart:io';
 
 class MapView extends StatefulWidget {
   const MapView({super.key});
@@ -17,10 +24,17 @@ class _MapViewState extends State<MapView> {
   String? username;
   int _selectedIndex = 0;
 
+  GoogleMapController? _mapController;
+  LatLng _initialPosition = const LatLng(-33.02457, -71.55183); // Default VdM
+  bool _locationServiceEnabled = false;
+  Location _location = Location();
+
+  Set<Marker> _markers = {};
   @override
   void initState() {
     super.initState();
     getCurrentUser();
+    _checkLocationPermissions();
   }
 
   void getCurrentUser() async {
@@ -51,6 +65,94 @@ class _MapViewState extends State<MapView> {
     }
   }
 
+  // Revisa permisos de ubicación
+  Future<void> _checkLocationPermissions() async {
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+
+    _serviceEnabled = await _location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await _location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await _location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await _location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _locationServiceEnabled = true;
+    _getUserLocation();
+  }
+
+  Future<void> _getUserLocation() async {
+    if (!_locationServiceEnabled) return;
+
+    try {
+      LocationData currentLocation = await _location.getLocation();
+      if (currentLocation.latitude != null &&
+          currentLocation.longitude != null) {
+        setState(() {
+          _initialPosition =
+              LatLng(currentLocation.latitude!, currentLocation.longitude!);
+        });
+        _mapController?.animateCamera(CameraUpdate.newLatLng(_initialPosition));
+      }
+    } catch (e) {
+      print('Error getting location: $e');
+    }
+  }
+
+  Future<String> _getApiKey() async {
+    await dotenv.load();
+    return dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '';
+  }
+
+  Future<void> _searchNearbyCafes() async {
+    if (_initialPosition == null) return;
+
+    final apiKey = await _getApiKey();
+    final lat = _initialPosition.latitude;
+    final lng = _initialPosition.longitude;
+    final url =
+        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=$lat,$lng&radius=1500&type=cafe&key=$apiKey';
+
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        _markers.clear();
+
+        List results = data['results'];
+
+        // Add a marker for each cafe
+        results.forEach((place) {
+          final location = place['geometry']['location'];
+          final marker = Marker(
+            markerId: MarkerId(place['place_id']),
+            position: LatLng(location['lat'], location['lng']),
+            infoWindow: InfoWindow(title: place['name']),
+          );
+
+          setState(() {
+            _markers.add(marker);
+          });
+        });
+      } else {
+        print('Failed to load places: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error fetching nearby cafes: $e');
+    }
+  }
+
   void _goToConfig() async {
     Navigator.pushNamed(context, AppRoutes.settings);
   }
@@ -58,16 +160,44 @@ class _MapViewState extends State<MapView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          Text(
-            username != null ? "Welcome $username" : "Welcome User",
-            style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+      body: Column(
+        children: [
+          Expanded(
+            child: _initialPosition.latitude == 0.0 &&
+                    _initialPosition.longitude == 0.0
+                ? const Center(
+                    child: CircularProgressIndicator(), // Loading
+                  )
+                : GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                      target: _initialPosition,
+                      zoom: 14,
+                    ),
+                    onMapCreated: (GoogleMapController controller) {
+                      _mapController = controller;
+                      _getUserLocation();
+                    },
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
+                    markers: _markers,
+                  ),
           ),
-        ]),
+          const SizedBox(height: 20.0),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: _searchNearbyCafes,
+              child: const Text('Buscar la cafeteria más cercana'),
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _mapController?.dispose();
+    super.dispose();
   }
 }
