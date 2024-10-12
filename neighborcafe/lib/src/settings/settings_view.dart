@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../views/welcome_screen.dart';
 import 'settings_controller.dart';
 
 /// Displays the various settings that can be customized by the user.
@@ -64,10 +63,10 @@ class SettingsView extends StatelessWidget {
       await FirebaseAuth.instance.signOut();
       // Usar pushAndRemoveUntil para eliminar toda la pila de navegación y redirigir al login
 
-      Navigator.pushAndRemoveUntil(
+      Navigator.pushNamedAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const WelcomeScreen()),
-        (Route<dynamic> route) => false, // Eliminar toda la pila
+        'auth_wrapper', // Nombre de la ruta
+        (Route<dynamic> route) => false, // Elimina todas las rutas anteriores
       );
     } catch (e) {
       // Manejo de errores al cerrar sesión

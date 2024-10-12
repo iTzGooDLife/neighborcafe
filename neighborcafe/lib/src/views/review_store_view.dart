@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../settings/app_colors.dart';
-import '../components/bottom_navigation_bar.dart'; // Asegúrate de importar el widget
 
 class ReviewStoreView extends StatefulWidget {
   const ReviewStoreView({super.key});
@@ -59,22 +57,6 @@ class _ReviewStoreViewState extends State<ReviewStoreView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: null,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: _goToConfig,
-          ),
-        ],
-        title: const Text('Review de las tiendas',
-            style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Roboto',
-                fontSize: 20,
-                fontWeight: FontWeight.bold)),
-        backgroundColor: AppColors.primaryColor,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child:
@@ -84,10 +66,6 @@ class _ReviewStoreViewState extends State<ReviewStoreView> {
             style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
           ),
         ]),
-      ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: _selectedIndex,
-        context: context,
       ),
     );
   }
