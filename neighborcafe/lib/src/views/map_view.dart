@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../services/routes.dart';
 
 class MapView extends StatefulWidget {
   const MapView({super.key});
@@ -51,7 +52,7 @@ class _MapViewState extends State<MapView> {
   }
 
   void _goToConfig() async {
-    Navigator.pushNamed(context, 'settings_screen');
+    Navigator.pushNamed(context, AppRoutes.settings);
   }
 
   @override

@@ -21,7 +21,7 @@ class SettingsView extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, 'home_screen');
+                Navigator.pushNamed(context, AppRoutes.home);
               },
               child: Image.asset(
                 'assets/images/cafeIcon.png', // Replace with your image path

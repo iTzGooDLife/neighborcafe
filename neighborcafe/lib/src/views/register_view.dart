@@ -46,38 +46,6 @@ class _RegisterViewState extends State<RegisterView> {
     }
   }
 
-  /* Future<void> _register() async {
-    try {
-      UserCredential userCredential =
-          await _auth.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-
-      if (userCredential.user != null) {
-        // Guardar el nombre y el correo en Firestore
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userCredential.user!.uid)
-            .set({
-          'name': _nameController.text.trim(),
-          'email': _emailController.text.trim(),
-        });
-      }
-
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        'home_screen', // Nombre de la ruta
-        (Route<dynamic> route) => false, // Elimina todas las rutas anteriores
-      );
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        _errorMessage = e.message ?? 'Error desconocido';
-      });
-    }
-  }
-*/
-
   Future<void> _register() async {
     if (_nameController.text.isEmpty ||
         _emailController.text.isEmpty ||

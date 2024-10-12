@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../services/routes.dart';
 
 class ReviewStoreView extends StatefulWidget {
   const ReviewStoreView({super.key});
@@ -50,7 +51,7 @@ class _ReviewStoreViewState extends State<ReviewStoreView> {
   }
 
   void _goToConfig() async {
-    Navigator.pushNamed(context, 'settings_screen');
+    Navigator.pushNamed(context, AppRoutes.settings);
   }
 
   @override
