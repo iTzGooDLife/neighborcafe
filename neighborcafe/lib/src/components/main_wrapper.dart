@@ -28,7 +28,22 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.titles[_selectedIndex]),
+        automaticallyImplyLeading: false,
+        title: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, 'home_screen');
+              },
+              child: Image.asset(
+                'assets/images/cafeIcon.png', // Replace with your image path
+                height: 60.0, // Adjust the height as needed
+              ),
+            ),
+            const SizedBox(width: 8.0), // Space between the image and title
+            Text(widget.titles[_selectedIndex]),
+          ],
+        ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.settings),

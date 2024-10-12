@@ -20,6 +20,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
+                Image.asset(
+                  'assets/images/cafeIcon.png',
+                  height: 300.0,
+                ),
+                const SizedBox(height: 20),
                 RoundedButton(
                   colour: AppColors.primaryColor,
                   title: 'Iniciar Sesión',

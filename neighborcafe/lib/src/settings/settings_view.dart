@@ -16,7 +16,21 @@ class SettingsView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text('Settings'),
+        title: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, 'home_screen');
+              },
+              child: Image.asset(
+                'assets/images/cafeIcon.png', // Replace with your image path
+                height: 60.0, // Adjust the height as needed
+              ),
+            ),
+            const SizedBox(width: 8.0), // Space between the image and title
+            const Text('Settings'),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
