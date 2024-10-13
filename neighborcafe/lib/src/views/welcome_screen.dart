@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:neighborcafe/src/settings/app_colors.dart';
 import '../components/rounded_button.dart';
 import '../services/routes.dart';
+import '../services/auth_service.dart';
+import 'package:provider/provider.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -11,6 +13,21 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _checkAuth();
+  }
+
+  void _checkAuth() async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final isSignedIn = await authService.isSignedIn();
+
+    if (isSignedIn) {
+      Navigator.pushReplacementNamed(context, AppRoutes.home);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

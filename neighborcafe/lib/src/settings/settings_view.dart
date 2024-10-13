@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'settings_controller.dart';
 import '../services/routes.dart';
+import 'package:provider/provider.dart';
+import '../services/auth_service.dart';
 
 /// Displays the various settings that can be customized by the user.
 ///
@@ -75,8 +76,8 @@ class SettingsView extends StatelessWidget {
 
   void _logout(BuildContext context) async {
     try {
-      await FirebaseAuth.instance.signOut();
-      // Usar pushAndRemoveUntil para eliminar toda la pila de navegación y redirigir al login
+      final authService = Provider.of<AuthService>(context, listen: false);
+      await authService.signOut();
 
       Navigator.pushNamedAndRemoveUntil(
         context,
