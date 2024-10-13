@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:neighborcafe/src/settings/app_colors.dart';
 import '../components/rounded_button.dart';
 import '../components/rounded_text.dart';
@@ -61,11 +60,19 @@ class _RegisterViewState extends State<RegisterView> {
             _emailController.text.trim(),
             _passwordController.text.trim(),
           );
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.home,
-        (Route<dynamic> route) => false,
-      );
+
+      final isSignedIn = await context.read<AuthService>().isSignedIn();
+      if (isSignedIn) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.home,
+          (Route<dynamic> route) => false,
+        );
+      } else {
+        setState(() {
+          _errorMessage = 'Error al guardar la sesión';
+        });
+      }
     } catch (e) {
       setState(() {
         _errorMessage = e.toString();

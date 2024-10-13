@@ -8,6 +8,8 @@ import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
 
 class LoginView extends StatefulWidget {
+  const LoginView({super.key});
+
   @override
   _LoginViewState createState() => _LoginViewState();
 }
@@ -16,26 +18,6 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   String _errorMessage = '';
-
-  /* Future<void> _login() async {
-    try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.home, // Nombre de la ruta
-        (Route<dynamic> route) => false, // Elimina todas las rutas anteriores
-      );
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        _errorMessage = e.message ?? 'Error desconocido';
-      });
-    }
-  }
-*/
 
   Future<void> _login() async {
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
@@ -50,11 +32,19 @@ class _LoginViewState extends State<LoginView> {
             _emailController.text.trim(),
             _passwordController.text.trim(),
           );
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        AppRoutes.home,
-        (Route<dynamic> route) => false,
-      );
+
+      final isSignedIn = await context.read<AuthService>().isSignedIn();
+      if (isSignedIn) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.home,
+          (Route<dynamic> route) => false,
+        );
+      } else {
+        setState(() {
+          _errorMessage = 'Error al guardar la sesión';
+        });
+      }
     } catch (e) {
       setState(() {
         _errorMessage = e is FirebaseAuthException

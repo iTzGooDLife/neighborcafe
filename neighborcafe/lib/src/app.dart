@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'services/auth_service.dart';
 import 'services/routes.dart';
 import 'services/auth_guard.dart';
-import 'services/session_timeout_manager.dart';
 
 import 'settings/settings_controller.dart';
 import 'settings/app_colors.dart'; // Importa el archivo de colores
@@ -83,11 +82,9 @@ class MyApp extends StatelessWidget {
               AppRoutes.routes(settingsController).entries.map(
                     (entry) => MapEntry(
                       entry.key,
-                      (context) => SessionTimeoutManager(
-                        child: AuthGuard(
-                          routeName: entry.key,
-                          child: entry.value(context),
-                        ),
+                      (context) => AuthGuard(
+                        routeName: entry.key,
+                        child: entry.value(context),
                       ),
                     ),
                   ),
