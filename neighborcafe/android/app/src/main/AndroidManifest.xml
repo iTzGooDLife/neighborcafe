@@ -3,7 +3,7 @@
     package="com.example.neighborcafe"
     >
     <application
-        android:label="neighborcafe"
+        android:label="NeighborCafe"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
