@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
 import 'bottom_navigation_bar.dart';
 import '../services/routes.dart';
+import '../views/initial_view.dart';
+import '../views/map_view.dart';
+import '../views/recommendations_view.dart';
+import '../views/stores_view.dart';
 
 class MainScreenWrapper extends StatefulWidget {
-  final List<Widget> screens;
-  final List<String> titles;
-
   const MainScreenWrapper({
-    Key? key,
-    required this.screens,
-    required this.titles,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   _MainScreenWrapperState createState() => _MainScreenWrapperState();
 }
 
 class _MainScreenWrapperState extends State<MainScreenWrapper> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 3;
+
+  final List<Widget> screens = const [
+    MapView(),
+    RecommendationsView(),
+    StoresView(),
+    InitialView(),
+  ];
+
+  final List<String> titles = const [
+    'Mapa',
+    'Recomendaciones',
+    'Tiendas online',
+    'Inicio',
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -34,7 +47,9 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, AppRoutes.home);
+                setState(() {
+                  _selectedIndex = 3; // Volver a la pantalla inicial
+                });
               },
               child: Image.asset(
                 'assets/images/cafeIcon.png', // Replace with your image path
@@ -42,7 +57,9 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
               ),
             ),
             const SizedBox(width: 8.0), // Space between the image and title
-            Text(widget.titles[_selectedIndex]),
+            Text(titles[_selectedIndex],
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0)),
           ],
         ),
         actions: <Widget>[
@@ -54,7 +71,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
       ),
       body: IndexedStack(
         index: _selectedIndex,
-        children: widget.screens,
+        children: screens,
       ),
       bottomNavigationBar: BottomNavBar(
         selectedIndex: _selectedIndex,

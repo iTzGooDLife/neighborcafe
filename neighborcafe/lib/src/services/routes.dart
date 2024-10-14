@@ -8,6 +8,7 @@ import '../views/map_view.dart';
 import '../views/stores_view.dart';
 import '../views/recommendations_view.dart';
 import '../views/review_store_view.dart';
+import '../views/initial_view.dart';
 import '../settings/settings_view.dart';
 
 class AppRoutes {
@@ -19,6 +20,7 @@ class AppRoutes {
   static const String settings = '/settings';
   static const String stores = '/stores';
   static const String recommendationsview = '/recommendations';
+  static const String initialview = '/initialview';
   static const String reviewstore = '/review_store';
 
   static Map<String, WidgetBuilder> routes(
@@ -32,6 +34,7 @@ class AppRoutes {
         settings: (context) => SettingsView(controller: settingsController),
         stores: (context) => const StoresView(),
         recommendationsview: (context) => const RecommendationsView(),
+        initialview: (context) => const InitialView(),
         reviewstore: (context) => const ReviewStoreView(),
       };
 
@@ -41,6 +44,7 @@ class AppRoutes {
         settings,
         stores,
         recommendationsview,
+        initialview,
         reviewstore,
       ];
 }
