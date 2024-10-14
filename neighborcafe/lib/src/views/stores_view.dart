@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart'; // Importar url_launcher
 import '../services/routes.dart';
 import 'dart:convert';
 
@@ -17,7 +18,7 @@ class _StoresViewState extends State<StoresView> {
   User? loggedinUser; // Cambia a User? para permitir valores nulos
   String? username;
 
-  // Lista completa de datos (sin filtrar)
+// Lista completa de datos (sin filtrar)
   List<dynamic> _allCardsData = [];
   // Lista de datos filtrados que se mostrarán
   List<dynamic> _filteredCardsData = [];
@@ -28,9 +29,9 @@ class _StoresViewState extends State<StoresView> {
   void _loadData() {
     String jsonString = '''
     [
-      { "title": "Card 1", "description": "This is the description of card 1", "online": true },
-      { "title": "Card 2", "description": "This is the description of card 2", "online": false },
-      { "title": "Card 3", "description": "This is the description of card 3", "online": true }
+      { "title": "Card 1", "description": "This is the description of card 1", "online": true, "link": "https://www.facebook.com" },
+      { "title": "Card 2", "description": "This is the description of card 2", "online": false, "link": "https://www.example.com/2" },
+      { "title": "Card 3", "description": "This is the description of card 3", "online": true, "link": "https://www.example.com/3" }
     ]
     ''';
 
@@ -57,6 +58,15 @@ class _StoresViewState extends State<StoresView> {
         _filteredCardsData = _allCardsData;
       }
     });
+  }
+
+  _launchURL(String url) async {
+    final Uri _url = Uri.parse('https://flutter.dev');
+    if (await canLaunchUrl(_url)) {
+      await launchUrl(_url);
+    } else {
+      throw 'Could not launch $_url';
+    }
   }
 
   @override
@@ -122,19 +132,34 @@ class _StoresViewState extends State<StoresView> {
                   margin: EdgeInsets.all(10),
                   child: Padding(
                     padding: EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          card['title'],
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                        // Información de la card
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                card['title'],
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 10),
+                              Text(card['description']),
+                              SizedBox(height: 10),
+                              Text("Online: ${card['online'] ? 'Yes' : 'No'}",
+                                  style:
+                                      TextStyle(fontStyle: FontStyle.italic)),
+                            ],
+                          ),
                         ),
-                        SizedBox(height: 10),
-                        Text(card['description']),
-                        SizedBox(height: 10),
-                        Text("Online: ${card['online'] ? 'Yes' : 'No'}",
-                            style: TextStyle(fontStyle: FontStyle.italic)),
+                        // Botón para abrir el link
+                        IconButton(
+                          icon: Icon(Icons.link),
+                          onPressed: () => _launchURL(card['link']),
+                          tooltip: 'Abrir enlace',
+                        ),
                       ],
                     ),
                   ),
