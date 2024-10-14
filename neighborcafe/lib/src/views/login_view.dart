@@ -90,6 +90,13 @@ class _LoginViewState extends State<LoginView> {
                 colour: AppColors.secondaryColor,
                 title: 'Iniciar Sesión',
                 onPressed: _login),
+            TextButton(
+              onPressed: () {
+                // Redirigir a la vista de "Forgot Password"
+                Navigator.pushNamed(context, '/reset_password');
+              },
+              child: const Text('¿Olvidaste tu contraseña?'),
+            ),
             if (_errorMessage.isNotEmpty)
               Text(_errorMessage, style: const TextStyle(color: Colors.red)),
           ],

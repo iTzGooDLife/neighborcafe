@@ -10,6 +10,7 @@ import '../views/recommendations_view.dart';
 import '../views/review_store_view.dart';
 import '../views/initial_view.dart';
 import '../settings/settings_view.dart';
+import '../views/reset_email.dart';
 
 class AppRoutes {
   static const String welcome = '/';
@@ -22,6 +23,7 @@ class AppRoutes {
   static const String recommendationsview = '/recommendations';
   static const String initialview = '/initialview';
   static const String reviewstore = '/review_store';
+  static const String resetpassword = '/reset_password';
 
   static Map<String, WidgetBuilder> routes(
           SettingsController settingsController) =>
@@ -36,6 +38,7 @@ class AppRoutes {
         recommendationsview: (context) => const RecommendationsView(),
         initialview: (context) => const InitialView(),
         reviewstore: (context) => const ReviewStoreView(),
+        resetpassword: (context) => const PasswordResetView(),
       };
 
   static List<String> get protectedRoutes => [
