@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/routes.dart';
+import 'dart:convert';
 
 class StoresView extends StatefulWidget {
   const StoresView({super.key});
@@ -16,10 +17,53 @@ class _StoresViewState extends State<StoresView> {
   User? loggedinUser; // Cambia a User? para permitir valores nulos
   String? username;
 
+  // Lista completa de datos (sin filtrar)
+  List<dynamic> _allCardsData = [];
+  // Lista de datos filtrados que se mostrarán
+  List<dynamic> _filteredCardsData = [];
+  // Estado del filtro
+  bool _showOnlyOnline = false;
+
+  // Simulación de cargar datos desde JSON
+  void _loadData() {
+    String jsonString = '''
+    [
+      { "title": "Card 1", "description": "This is the description of card 1", "online": true },
+      { "title": "Card 2", "description": "This is the description of card 2", "online": false },
+      { "title": "Card 3", "description": "This is the description of card 3", "online": true }
+    ]
+    ''';
+
+    final jsonData = json.decode(jsonString);
+
+    setState(() {
+      _allCardsData = jsonData;
+      _filteredCardsData =
+          _allCardsData; // Inicialmente, mostrar todas las cards
+    });
+  }
+
+  // Función para alternar el filtro de mostrar solo "online"
+  void _toggleOnlineFilter() {
+    setState(() {
+      _showOnlyOnline = !_showOnlyOnline;
+
+      if (_showOnlyOnline) {
+        // Filtrar solo las cards que tienen el campo online en true
+        _filteredCardsData =
+            _allCardsData.where((card) => card['online'] == true).toList();
+      } else {
+        // Si no se activa el filtro, mostrar todas las cards
+        _filteredCardsData = _allCardsData;
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     getCurrentUser();
+    _loadData(); // Cargar los datos cuando la pantalla se inicia
   }
 
   void getCurrentUser() async {
@@ -57,15 +101,48 @@ class _StoresViewState extends State<StoresView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          Text(
-            username != null ? "Welcome $username" : "Welcome User",
-            style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+      body: Column(
+        children: [
+          // Botón para activar/desactivar el filtro
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              onPressed: _toggleOnlineFilter,
+              child: Text(
+                  _showOnlyOnline ? 'Mostrar Solo Online' : 'Mostrar Todos'),
+            ),
           ),
-        ]),
+          // Lista de cards
+          Expanded(
+            child: ListView.builder(
+              itemCount: _filteredCardsData.length,
+              itemBuilder: (context, index) {
+                final card = _filteredCardsData[index];
+                return Card(
+                  margin: EdgeInsets.all(10),
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          card['title'],
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10),
+                        Text(card['description']),
+                        SizedBox(height: 10),
+                        Text("Online: ${card['online'] ? 'Yes' : 'No'}",
+                            style: TextStyle(fontStyle: FontStyle.italic)),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
