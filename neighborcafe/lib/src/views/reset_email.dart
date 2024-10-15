@@ -39,7 +39,7 @@ class _PasswordResetViewState extends State<PasswordResetView> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
-              'Iniciar Sesión',
+              'Recuperar Contraseña',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
