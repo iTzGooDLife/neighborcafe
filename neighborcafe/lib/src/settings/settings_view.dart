@@ -30,7 +30,11 @@ class SettingsView extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8.0), // Space between the image and title
-            const Text('Settings'),
+            const Text('Settings',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                )),
           ],
         ),
       ),
