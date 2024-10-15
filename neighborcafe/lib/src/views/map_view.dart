@@ -25,7 +25,7 @@ class _MapViewState extends State<MapView> {
   int _selectedIndex = 0;
 
   GoogleMapController? _mapController;
-  LatLng _initialPosition = const LatLng(-33.035075, -71.596955); // Default VdM
+  LatLng _initialPosition = const LatLng(-33.035007, -71.596955); // Default VdM
   bool _locationServiceEnabled = false;
   Location _location = Location();
 
@@ -162,33 +162,33 @@ class _MapViewState extends State<MapView> {
     return Scaffold(
       body: Stack(
         children: [
-          Expanded(
-            child: _initialPosition.latitude == 0.0 &&
-                    _initialPosition.longitude == 0.0
-                ? const Center(
-                    child: CircularProgressIndicator(), // Loading
-                  )
-                : GoogleMap(
-                    initialCameraPosition: CameraPosition(
-                      target: _initialPosition,
-                      zoom: 14,
-                    ),
-                    onMapCreated: (GoogleMapController controller) {
-                      _mapController = controller;
-                      _getUserLocation();
-                    },
-                    myLocationEnabled: true,
-                    myLocationButtonEnabled: true,
-                    markers: _markers,
+          _initialPosition.latitude == 0.0 && _initialPosition.longitude == 0.0
+              ? const Center(
+                  child: CircularProgressIndicator(), // Loading
+                )
+              : GoogleMap(
+                  initialCameraPosition: CameraPosition(
+                    target: _initialPosition,
+                    zoom: 14,
                   ),
-          ),
+                  onMapCreated: (GoogleMapController controller) {
+                    _mapController = controller;
+                    _getUserLocation();
+                  },
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
+                  markers: _markers,
+                ),
           Positioned(
             bottom: 16,
             left: 70,
             right: 70,
             child: ElevatedButton(
               onPressed: _searchNearbyCafes,
-              child: const Text('Buscar la cafeteria más cercana'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+              child: const Text('Buscar la cafetería más cercana'),
             ),
           ),
         ],
