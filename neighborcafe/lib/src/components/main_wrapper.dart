@@ -64,9 +64,9 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
         ),
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
-          ),
+              icon: const Icon(Icons.settings),
+              onPressed: () => Navigator.pushNamed(context, AppRoutes.settings),
+              color: Colors.white),
         ],
       ),
       body: IndexedStack(
