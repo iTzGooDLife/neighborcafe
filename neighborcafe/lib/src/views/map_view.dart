@@ -25,7 +25,7 @@ class _MapViewState extends State<MapView> {
   int _selectedIndex = 0;
 
   GoogleMapController? _mapController;
-  LatLng _initialPosition = const LatLng(-33.02457, -71.55183); // Default VdM
+  LatLng _initialPosition = const LatLng(-33.035075, -71.596955); // Default VdM
   bool _locationServiceEnabled = false;
   Location _location = Location();
 
@@ -160,7 +160,7 @@ class _MapViewState extends State<MapView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Stack(
         children: [
           Expanded(
             child: _initialPosition.latitude == 0.0 &&
@@ -182,9 +182,10 @@ class _MapViewState extends State<MapView> {
                     markers: _markers,
                   ),
           ),
-          const SizedBox(height: 20.0),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          Positioned(
+            bottom: 16,
+            left: 70,
+            right: 70,
             child: ElevatedButton(
               onPressed: _searchNearbyCafes,
               child: const Text('Buscar la cafeteria más cercana'),
