@@ -5,6 +5,7 @@ class AppColors {
   static const Color secondaryColor = Color(0xFF04474B); // Verde
   static const Color backgroundColor = Color(0xFFE7E7E5); // Gris
   static const Color textColor = Color(0xFF000000); // Negro
+  static const Color aditionalColor = Color(0xFFD3B9B9); // Beige
 }
 
 // Verde: #xFF04474B
