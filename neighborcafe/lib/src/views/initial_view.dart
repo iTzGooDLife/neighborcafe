@@ -62,7 +62,7 @@ class _InitialViewState extends State<InitialView> {
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Text(
-            username != null ? "Welcome $username" : "Welcome User",
+            username != null ? "Bienvenido $username" : "Bienvenido Usuario",
             style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
           ),
         ]),
