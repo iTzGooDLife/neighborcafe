@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../settings/app_colors.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int selectedIndex;
@@ -12,6 +13,7 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
@@ -29,11 +31,13 @@ class BottomNavBar extends StatelessWidget {
       ],
       currentIndex: selectedIndex == 3 ? 2 : selectedIndex,
       // selectedItemColor: Colors.blueAccent,
-      selectedItemColor:
-          selectedIndex == 3 ? Colors.grey[300] : Colors.blueAccent,
+      selectedItemColor: selectedIndex == 3
+          ? (!isDarkMode ? AppColors.secondaryColor : Colors.grey[300])
+          : Colors.blueAccent,
       selectedFontSize: selectedIndex == 3 ? 12.0 : 14.0,
 
-      unselectedItemColor: Colors.grey[300],
+      unselectedItemColor:
+          !isDarkMode ? AppColors.secondaryColor : Colors.grey[300],
       onTap: (index) {
         onItemTapped(index);
       },
