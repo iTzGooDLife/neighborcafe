@@ -32,22 +32,30 @@ class _PasswordResetViewState extends State<PasswordResetView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Recuperar Contraseña')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const Text(
+              'Iniciar Sesión',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 20),
             RoundedTextField(
                 hintText: 'Correo Electrónico',
                 controller: _emailController,
                 backgroundColor: AppColors.backgroundColor,
                 textColor: Colors.black,
                 obscureText: false),
-            const SizedBox(height: 16),
+            const SizedBox(height: 8),
             RoundedButton(
-                colour: AppColors.primaryColor,
+                colour: AppColors.secondaryColor,
                 title: 'Enviar Correo de Recuperación',
                 onPressed: _resetPassword),
           ],
