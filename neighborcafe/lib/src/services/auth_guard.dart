@@ -15,20 +15,35 @@ class AuthGuard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-      future: context.read<AuthService>().isSignedIn(),
+    // return FutureBuilder<bool>(
+    return FutureBuilder<Map<String, bool>>(
+      future: context.read<AuthService>().getAuthStatus(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         }
 
-        final isSignedIn = snapshot.data ?? false;
+        final authStatus =
+            snapshot.data ?? {'isSignedIn': false, 'isEmailVerified': false};
+        final isSignedIn = authStatus['isSignedIn'] ?? false;
+        final isEmailVerified = authStatus['isEmailVerified'] ?? false;
         final isProtectedRoute = AppRoutes.protectedRoutes.contains(routeName);
 
         if (isProtectedRoute && !isSignedIn) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.of(context).pushNamedAndRemoveUntil(
               AppRoutes.welcome,
+              (Route<dynamic> route) => false,
+            );
+          });
+          return Container();
+        } else if (isProtectedRoute &&
+            isSignedIn &&
+            !isEmailVerified &&
+            routeName != AppRoutes.checkemail) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              AppRoutes.checkemail,
               (Route<dynamic> route) => false,
             );
           });

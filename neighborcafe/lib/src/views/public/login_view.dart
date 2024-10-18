@@ -35,6 +35,12 @@ class _LoginViewState extends State<LoginView> {
 
       final isSignedIn = await context.read<AuthService>().isSignedIn();
       if (isSignedIn) {
+        final isVerified =
+            await context.read<AuthService>().checkEmailVerified();
+        if (!isVerified) {
+          Navigator.pushNamed(context, AppRoutes.checkemail);
+          return;
+        }
         Navigator.pushNamedAndRemoveUntil(
           context,
           AppRoutes.home,

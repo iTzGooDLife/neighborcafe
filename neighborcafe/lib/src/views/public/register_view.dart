@@ -61,13 +61,10 @@ class _RegisterViewState extends State<RegisterView> {
             _passwordController.text.trim(),
           );
 
+      // Para guardar el token
       final isSignedIn = await context.read<AuthService>().isSignedIn();
       if (isSignedIn) {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          AppRoutes.home,
-          (Route<dynamic> route) => false,
-        );
+        Navigator.pushNamed(context, AppRoutes.checkemail);
       } else {
         setState(() {
           _errorMessage = 'Error al guardar la sesión';

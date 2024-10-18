@@ -52,4 +52,32 @@ class AuthService {
     }
     return _auth.currentUser;
   }
+
+  Future<bool> checkEmailVerified() async {
+    User? user = _auth.currentUser;
+
+    if (user != null) {
+      await user.reload();
+      user = _auth.currentUser;
+      return user!.emailVerified;
+    }
+
+    return false;
+  }
+
+  Future<Map<String, bool>> getAuthStatus() async {
+    bool signedIn = await isSignedIn();
+    bool emailVerified = signedIn ? await checkEmailVerified() : false;
+    return {
+      'isSignedIn': signedIn,
+      'isEmailVerified': emailVerified,
+    };
+  }
+
+  Future<void> sendEmailVerification() async {
+    User? user = _auth.currentUser;
+    if (user != null && !user.emailVerified) {
+      await user.sendEmailVerification();
+    }
+  }
 }
