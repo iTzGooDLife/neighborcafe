@@ -11,7 +11,6 @@ import '../views/private/stores_view.dart';
 import '../views/private/recommendations_view.dart';
 import '../views/private/review_store_view.dart';
 import '../views/private/initial_view.dart';
-import '../settings/settings_view.dart';
 
 class AppRoutes {
   static const String welcome = '/';
@@ -35,7 +34,6 @@ class AppRoutes {
         register: (context) => const RegisterView(),
         home: (context) => HomePage(controller: settingsController),
         map: (context) => const MapView(),
-        settings: (context) => SettingsView(controller: settingsController),
         stores: (context) => const StoresView(),
         recommendationsview: (context) => const RecommendationsView(),
         initialview: (context) => const InitialView(),
