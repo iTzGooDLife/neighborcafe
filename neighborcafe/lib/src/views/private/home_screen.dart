@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // Asegúrate de importar el widget
-import '../components/main_wrapper.dart';
+import '../../components/main_wrapper.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

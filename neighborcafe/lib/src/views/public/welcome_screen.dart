@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:neighborcafe/src/settings/app_colors.dart';
-import '../components/rounded_button.dart';
-import '../services/routes.dart';
-import '../services/auth_service.dart';
+import '../../components/rounded_button.dart';
+import '../../services/routes.dart';
+import '../../services/auth_service.dart';
 import 'package:provider/provider.dart';
 
 class WelcomeScreen extends StatefulWidget {

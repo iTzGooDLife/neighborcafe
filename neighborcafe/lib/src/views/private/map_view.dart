@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../services/routes.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'dart:convert';
-import 'dart:io';
 
 class MapView extends StatefulWidget {
   const MapView({super.key});
@@ -22,14 +20,13 @@ class _MapViewState extends State<MapView> {
   final _firestore = FirebaseFirestore.instance;
   User? loggedinUser; // Cambia a User? para permitir valores nulos
   String? username;
-  int _selectedIndex = 0;
 
   GoogleMapController? _mapController;
   LatLng _initialPosition = const LatLng(-33.035007, -71.596955); // Default VdM
   bool _locationServiceEnabled = false;
-  Location _location = Location();
+  final Location _location = Location();
 
-  Set<Marker> _markers = {};
+  final Set<Marker> _markers = {};
   @override
   void initState() {
     super.initState();
@@ -67,21 +64,21 @@ class _MapViewState extends State<MapView> {
 
   // Revisa permisos de ubicación
   Future<void> _checkLocationPermissions() async {
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
 
-    _serviceEnabled = await _location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await _location.requestService();
-      if (!_serviceEnabled) {
+    serviceEnabled = await _location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await _location.requestService();
+      if (!serviceEnabled) {
         return;
       }
     }
 
-    _permissionGranted = await _location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await _location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+    permissionGranted = await _location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await _location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
         return;
       }
     }
@@ -114,8 +111,6 @@ class _MapViewState extends State<MapView> {
   }
 
   Future<void> _searchNearbyCafes() async {
-    if (_initialPosition == null) return;
-
     final apiKey = await _getApiKey();
     final lat = _initialPosition.latitude;
     final lng = _initialPosition.longitude;
@@ -133,7 +128,7 @@ class _MapViewState extends State<MapView> {
         List results = data['results'];
 
         // Add a marker for each cafe
-        results.forEach((place) {
+        for (var place in results) {
           final location = place['geometry']['location'];
           final marker = Marker(
             markerId: MarkerId(place['place_id']),
@@ -144,17 +139,13 @@ class _MapViewState extends State<MapView> {
           setState(() {
             _markers.add(marker);
           });
-        });
+        }
       } else {
         print('Failed to load places: ${response.statusCode}');
       }
     } catch (e) {
       print('Error fetching nearby cafes: $e');
     }
-  }
-
-  void _goToConfig() async {
-    Navigator.pushNamed(context, AppRoutes.settings);
   }
 
   @override

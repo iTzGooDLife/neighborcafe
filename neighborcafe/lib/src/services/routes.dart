@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import '../settings/settings_controller.dart';
-import '../views/register_view.dart';
-import '../views/login_view.dart';
-import '../views/welcome_screen.dart';
-import '../views/home_screen.dart';
-import '../views/map_view.dart';
-import '../views/stores_view.dart';
-import '../views/recommendations_view.dart';
-import '../views/review_store_view.dart';
-import '../views/initial_view.dart';
+import '../views/public/register_view.dart';
+import '../views/public/login_view.dart';
+import '../views/public/welcome_screen.dart';
+import '../views/private/home_screen.dart';
+import '../views/private/map_view.dart';
+import '../views/private/stores_view.dart';
+import '../views/private/recommendations_view.dart';
+import '../views/private/review_store_view.dart';
+import '../views/private/initial_view.dart';
 import '../settings/settings_view.dart';
-import '../views/reset_email.dart';
+import '../views/public/reset_email.dart';
 
 class AppRoutes {
   static const String welcome = '/';
@@ -29,7 +29,7 @@ class AppRoutes {
           SettingsController settingsController) =>
       {
         welcome: (context) => const WelcomeScreen(),
-        login: (context) => LoginView(),
+        login: (context) => const LoginView(),
         register: (context) => const RegisterView(),
         home: (context) => const HomePage(),
         map: (context) => const MapView(),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:neighborcafe/src/settings/app_colors.dart';
-import '../components/rounded_button.dart';
-import '../components/rounded_text.dart';
-import '../services/routes.dart';
+import '../../components/rounded_button.dart';
+import '../../components/rounded_text.dart';
+import '../../services/routes.dart';
 import 'package:provider/provider.dart';
-import '../services/auth_service.dart';
+import '../../services/auth_service.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});

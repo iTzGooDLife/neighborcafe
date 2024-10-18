@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'bottom_navigation_bar.dart';
 import '../services/routes.dart';
-import '../views/initial_view.dart';
-import '../views/map_view.dart';
-import '../views/recommendations_view.dart';
-import '../views/stores_view.dart';
+import '../views/private/initial_view.dart';
+import '../views/private/map_view.dart';
+import '../views/private/recommendations_view.dart';
+import '../views/private/stores_view.dart';
 
 class MainScreenWrapper extends StatefulWidget {
   const MainScreenWrapper({

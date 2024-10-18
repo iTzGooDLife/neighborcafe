@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart'; // Importar url_launcher
-import '../services/routes.dart';
 import 'dart:convert';
 
 class StoresView extends StatefulWidget {
@@ -102,10 +101,6 @@ class _StoresViewState extends State<StoresView> {
     } catch (e) {
       print('Error getting username: $e');
     }
-  }
-
-  void _goToConfig() async {
-    Navigator.pushNamed(context, AppRoutes.settings);
   }
 
   @override

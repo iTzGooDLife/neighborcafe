@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../components/rounded_button.dart';
-import '../components/rounded_text.dart';
-import '../settings/app_colors.dart';
+import '../../components/rounded_button.dart';
+import '../../components/rounded_text.dart';
+import '../../settings/app_colors.dart';
 
 class PasswordResetView extends StatefulWidget {
   const PasswordResetView({super.key});

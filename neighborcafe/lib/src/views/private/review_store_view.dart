@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../services/routes.dart';
 
-class RecommendationsView extends StatefulWidget {
-  const RecommendationsView({super.key});
+class ReviewStoreView extends StatefulWidget {
+  const ReviewStoreView({super.key});
 
   @override
-  _RecommendationsViewState createState() => _RecommendationsViewState();
+  _ReviewStoreViewState createState() => _ReviewStoreViewState();
 }
 
-class _RecommendationsViewState extends State<RecommendationsView> {
+class _ReviewStoreViewState extends State<ReviewStoreView> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   User? loggedinUser; // Cambia a User? para permitir valores nulos
   String? username;
-  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -51,10 +49,6 @@ class _RecommendationsViewState extends State<RecommendationsView> {
     }
   }
 
-  void _goToConfig() async {
-    Navigator.pushNamed(context, AppRoutes.settings);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +57,7 @@ class _RecommendationsViewState extends State<RecommendationsView> {
         child:
             Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Text(
-            username != null ? "Bienvenido $username" : "Bienvenido Usuario",
+            username != null ? "Welcome $username" : "Welcome User",
             style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
           ),
         ]),
