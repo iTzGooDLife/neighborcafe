@@ -33,7 +33,7 @@ class AppRoutes {
         welcome: (context) => const WelcomeScreen(),
         login: (context) => const LoginView(),
         register: (context) => const RegisterView(),
-        home: (context) => const HomePage(),
+        home: (context) => HomePage(controller: settingsController),
         map: (context) => const MapView(),
         settings: (context) => SettingsView(controller: settingsController),
         stores: (context) => const StoresView(),
