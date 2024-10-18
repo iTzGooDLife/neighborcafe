@@ -16,20 +16,18 @@ class MainScreenWrapper extends StatefulWidget {
 }
 
 class _MainScreenWrapperState extends State<MainScreenWrapper> {
-  int _selectedIndex = 3;
+  int _selectedIndex = 0;
 
   final List<Widget> screens = const [
     MapView(),
     RecommendationsView(),
     StoresView(),
-    InitialView(),
   ];
 
   final List<String> titles = const [
     'Mapa',
     'Recomendaciones',
     'Tiendas online',
-    'Inicio',
   ];
 
   void _onItemTapped(int index) {
@@ -45,16 +43,9 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
         automaticallyImplyLeading: false,
         title: Row(
           children: [
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedIndex = 3; // Volver a la pantalla inicial
-                });
-              },
-              child: Image.asset(
-                'assets/images/cafeIcon.png', // Replace with your image path
-                height: 60.0, // Adjust the height as needed
-              ),
+            Image.asset(
+              'assets/images/cafeIcon.png', // Replace with your image path
+              height: 60.0, // Adjust the height as needed
             ),
             const SizedBox(width: 8.0), // Space between the image and title
             Text(titles[_selectedIndex],

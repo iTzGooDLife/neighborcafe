@@ -29,26 +29,15 @@ class BottomNavBar extends StatelessWidget {
           label: 'Tiendas online',
         ),
       ],
-      currentIndex: selectedIndex == 3 ? 2 : selectedIndex,
-      // selectedItemColor: Colors.blueAccent,
-      selectedItemColor: selectedIndex == 3
-          ? (!isDarkMode ? AppColors.secondaryColor : Colors.grey[300])
-          : Colors.blueAccent,
-      selectedFontSize: selectedIndex == 3 ? 12.0 : 14.0,
-
+      currentIndex: selectedIndex,
+      selectedItemColor: AppColors.primaryColor,
       unselectedItemColor:
           !isDarkMode ? AppColors.secondaryColor : Colors.grey[300],
       onTap: (index) {
         onItemTapped(index);
       },
-      /* currentIndex: selectedIndex == 0 ? 1 : selectedIndex,
-      selectedItemColor:
-          selectedIndex == 0 ? Colors.grey[600] : Colors.blueAccent,
-      unselectedItemColor: Colors.grey[600],
-      onTap: (index) {
-        onItemTapped(
-            index); // Aumentar el índice para reflejar correctamente el stack
-      }, */
+      selectedFontSize: 16,
+      unselectedFontSize: 14,
     );
   }
 }
