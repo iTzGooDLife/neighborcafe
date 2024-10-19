@@ -8,6 +8,7 @@ import '../services/auth_service.dart';
 import 'package:provider/provider.dart';
 import '../services/routes.dart';
 import '../settings/app_colors.dart';
+import 'exit_confirmation.dart';
 
 class MainScreenWrapper extends StatefulWidget {
   const MainScreenWrapper({
@@ -22,6 +23,7 @@ class MainScreenWrapper extends StatefulWidget {
 
 class _MainScreenWrapperState extends State<MainScreenWrapper> {
   int _selectedIndex = 0;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final List<Widget> screens = const [
     MapView(),
@@ -60,93 +62,98 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Row(
-          children: [
-            Image.asset(
-              'assets/images/cafeIcon.png', // Replace with your image path
-              height: 60.0, // Adjust the height as needed
-            ),
-            const SizedBox(width: 8.0), // Space between the image and title
-            Text(titles[_selectedIndex],
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 20.0)),
-          ],
-        ),
-        actions: <Widget>[
-          Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () => Scaffold.of(context).openEndDrawer(),
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-      endDrawer: Drawer(
-        child: Container(
-          color: AppColors.backgroundColor,
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              const SizedBox(
-                height: 100,
-                child: DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryColor,
-                  ),
-                  child: Text(
-                    'NeighborCafe',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
+    return ExitConfirmationWrapper(
+      isDrawerOpen: () => _scaffoldKey.currentState?.isEndDrawerOpen ?? false,
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Row(
+            children: [
+              Image.asset(
+                'assets/images/cafeIcon.png', // Replace with your image path
+                height: 60.0, // Adjust the height as needed
               ),
-              ListTile(
-                leading: const Icon(Icons.color_lens),
-                title: const Text('Tema'),
-                trailing: DropdownButton<ThemeMode>(
-                  value: widget.controller.themeMode,
-                  onChanged: widget.controller.updateThemeMode,
-                  dropdownColor: AppColors.backgroundColor,
-                  items: const [
-                    DropdownMenuItem(
-                      value: ThemeMode.system,
-                      child: Text('Sistema'),
-                    ),
-                    DropdownMenuItem(
-                      value: ThemeMode.light,
-                      child: Text('Claro'),
-                    ),
-                    DropdownMenuItem(
-                      value: ThemeMode.dark,
-                      child: Text('Oscuro'),
-                    )
-                  ],
-                ),
-              ),
-              const Divider(),
-              ListTile(
-                leading: const Icon(Icons.exit_to_app),
-                title: const Text('Cerrar sesión'),
-                onTap: () => _logout(context),
-              ),
-              // Agrega más opciones de menú aquí
+              const SizedBox(width: 8.0), // Space between the image and title
+              Text(titles[_selectedIndex],
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 20.0)),
             ],
           ),
+          actions: <Widget>[
+            Builder(
+              builder: (context) => IconButton(
+                icon: const Icon(Icons.menu),
+                // onPressed: () => Scaffold.of(context).openEndDrawer(),
+                onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
-      ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: screens,
-      ),
-      bottomNavigationBar: BottomNavBar(
-        selectedIndex: _selectedIndex,
-        onItemTapped: _onItemTapped,
+        endDrawer: Drawer(
+          child: Container(
+            color: AppColors.backgroundColor,
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                const SizedBox(
+                  height: 100,
+                  child: DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor,
+                    ),
+                    child: Text(
+                      'NeighborCafe',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.color_lens),
+                  title: const Text('Tema'),
+                  trailing: DropdownButton<ThemeMode>(
+                    value: widget.controller.themeMode,
+                    onChanged: widget.controller.updateThemeMode,
+                    dropdownColor: AppColors.backgroundColor,
+                    items: const [
+                      DropdownMenuItem(
+                        value: ThemeMode.system,
+                        child: Text('Sistema'),
+                      ),
+                      DropdownMenuItem(
+                        value: ThemeMode.light,
+                        child: Text('Claro'),
+                      ),
+                      DropdownMenuItem(
+                        value: ThemeMode.dark,
+                        child: Text('Oscuro'),
+                      )
+                    ],
+                  ),
+                ),
+                const Divider(),
+                ListTile(
+                  leading: const Icon(Icons.exit_to_app),
+                  title: const Text('Cerrar sesión'),
+                  onTap: () => _logout(context),
+                ),
+                // Agrega más opciones de menú aquí
+              ],
+            ),
+          ),
+        ),
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: screens,
+        ),
+        bottomNavigationBar: BottomNavBar(
+          selectedIndex: _selectedIndex,
+          onItemTapped: _onItemTapped,
+        ),
       ),
     );
   }
