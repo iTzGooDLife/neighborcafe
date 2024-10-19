@@ -42,24 +42,13 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
           const SnackBar(content: Text("Email Successfully Verified")));
       timer?.cancel();
       // TODO: Navegar a la siguiente pantalla o realizar alguna acción
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.home,
+        (Route<dynamic> route) => false,
+      );
     }
   }
-
-  /* checkEmailVerified() async {
-    await _auth.currentUser?.reload();
-
-    setState(() {
-      isEmailVerified = _auth.currentUser!.emailVerified;
-    });
-
-    if (isEmailVerified) {
-    // TODO: implement your code after email verification
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Email Successfully Verified")));
-
-      timer?.cancel();
-    }
-  } */
 
   void _onBack() async {
     _authService.signOut();
