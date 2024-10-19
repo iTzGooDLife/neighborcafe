@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
@@ -19,11 +21,17 @@ class AuthService {
     return credential;
   }
 
-  Future<UserCredential> register(String email, String password) async {
+  Future<UserCredential> register(
+      String email, String username, String password) async {
     final credential = await _auth.createUserWithEmailAndPassword(
         email: email, password: password);
 
     if (credential.user != null) {
+      await _firestore.collection('users').doc(credential.user!.uid).set({
+        'name': username,
+        'email': email,
+      });
+
       final token = await credential.user!.getIdToken();
       await _storage.write(key: 'authToken', value: token);
     }

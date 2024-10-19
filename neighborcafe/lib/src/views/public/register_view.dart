@@ -58,6 +58,7 @@ class _RegisterViewState extends State<RegisterView> {
     try {
       await context.read<AuthService>().register(
             _emailController.text.trim(),
+            _nameController.text.trim(),
             _passwordController.text.trim(),
           );
 
