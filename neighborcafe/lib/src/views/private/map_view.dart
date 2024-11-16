@@ -248,15 +248,15 @@ class MapViewState extends State<MapView> {
       imageStream.removeListener(listener);
     }
 
-    // Open the modal bottom sheet after the image has loaded
+    if (!mounted) return;
+
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // Allows the bottom sheet to take up more space
+      isScrollControlled: true,
       builder: (context) {
         return Container(
-          height: MediaQuery.of(context).size.height *
-              0.9, // Adjust the height as needed
-          width: MediaQuery.of(context).size.width, // Full width of the screen
+          height: MediaQuery.of(context).size.height * 0.9,
+          width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
             child: Column(
