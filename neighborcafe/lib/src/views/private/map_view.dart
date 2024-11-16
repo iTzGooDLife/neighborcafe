@@ -229,7 +229,7 @@ class MapViewState extends State<MapView> {
     // Pre-fetch the image
     final image = NetworkImage(imageUrl);
     final completer = Completer<void>();
-    final imageStream = image.resolve(ImageConfiguration());
+    final imageStream = image.resolve(const ImageConfiguration());
     final listener =
         ImageStreamListener((ImageInfo info, bool synchronousCall) {
       completer.complete();
@@ -255,7 +255,7 @@ class MapViewState extends State<MapView> {
           height: MediaQuery.of(context).size.height *
               0.9, // Adjust the height as needed
           width: MediaQuery.of(context).size.width, // Full width of the screen
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -281,18 +281,19 @@ class MapViewState extends State<MapView> {
                     ),
                   ),
                 ),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 Center(
                   child: Text(
                     place['name'] ?? 'No name available',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 Center(
                   child: Text(place['vicinity'] ?? 'No address available'),
                 ),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('reviews')
@@ -300,10 +301,10 @@ class MapViewState extends State<MapView> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      return Center(
+                      return const Center(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -326,7 +327,7 @@ class MapViewState extends State<MapView> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           StarRating(rating: averageRating),
-                          SizedBox(width: 4.0),
+                          const SizedBox(width: 4.0),
                           Text(
                             ' (${averageRating.toStringAsFixed(1)})',
                           ),
@@ -335,8 +336,8 @@ class MapViewState extends State<MapView> {
                     );
                   },
                 ),
-                SizedBox(height: 16.0),
-                Text(
+                const SizedBox(height: 16.0),
+                const Text(
                   'Reviews',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
@@ -347,10 +348,10 @@ class MapViewState extends State<MapView> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      return Center(child: Text('No reviews yet.'));
+                      return const Center(child: Text('No reviews yet.'));
                     }
                     final reviews = snapshot.data!.docs;
                     return Column(
@@ -366,7 +367,7 @@ class MapViewState extends State<MapView> {
                     );
                   },
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
@@ -376,7 +377,7 @@ class MapViewState extends State<MapView> {
                         }
                       });
                     },
-                    child: Text('Add a Review'),
+                    child: const Text('Add a Review'),
                   ),
                 ),
               ],
