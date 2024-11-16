@@ -267,19 +267,23 @@ class MapViewState extends State<MapView> {
                   child: ClipRRect(
                     borderRadius:
                         BorderRadius.circular(16.0), // Smooth border radius
-                    child: Image.network(
-                      imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return ClipRRect(
-                          borderRadius: BorderRadius.circular(
-                              16.0), // Smooth border radius for placeholder
-                          child: Image.asset(
-                            'assets/placeholder_image.png', // Path to your placeholder image
-                            fit: BoxFit.cover,
-                          ),
-                        );
-                      },
+                    child: SizedBox(
+                      height: 400,
+                      width: double.infinity,
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                                16.0), // Smooth border radius for placeholder
+                            child: Image.asset(
+                              'assets/placeholder_image.png', // Path to your placeholder image
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
