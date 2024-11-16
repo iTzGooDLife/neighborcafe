@@ -134,6 +134,9 @@ class _MapViewState extends State<MapView> {
             markerId: MarkerId(place['place_id']),
             position: LatLng(location['lat'], location['lng']),
             infoWindow: InfoWindow(title: place['name']),
+            onTap: () {
+              _showMarkerDetails(place);
+            },
           );
 
           setState(() {
@@ -146,6 +149,35 @@ class _MapViewState extends State<MapView> {
     } catch (e) {
       print('Error fetching nearby cafes: $e');
     }
+  }
+
+  void _showMarkerDetails(Map<String, dynamic> place) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true, // Allows the bottom sheet to take up more space
+      builder: (context) {
+        return Container(
+          height: MediaQuery.of(context).size.height *
+              0.9, // Adjust the height as needed
+          width: MediaQuery.of(context).size.width, // Full width of the screen
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                place['name'],
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 8.0),
+              Text(place['vicinity']),
+              SizedBox(height: 8.0),
+              Text('Rating: ${place['rating'] ?? 'N/A'}'),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -179,7 +211,7 @@ class _MapViewState extends State<MapView> {
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 12),
               ),
-              child: const Text('Buscar la cafetería más cercana'),
+              child: const Text('Buscar cafeterías cercanas'),
             ),
           ),
         ],
