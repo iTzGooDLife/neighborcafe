@@ -3,39 +3,40 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-void showAddReviewDialog(BuildContext context, String placeId) {
-  final TextEditingController _reviewController = TextEditingController();
-  double _rating = 0.0;
+void showAddReviewDialog(
+    BuildContext context, String placeId, VoidCallback onReviewSubmitted) {
+  final TextEditingController reviewController = TextEditingController();
+  double rating = 0.0;
 
   showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text('Add a Review'),
+        title: const Text('Añadir una review'),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextField(
-                controller: _reviewController,
-                decoration: InputDecoration(labelText: 'Review'),
+                controller: reviewController,
+                decoration: const InputDecoration(labelText: 'Review'),
               ),
-              SizedBox(height: 16.0),
-              Text('Rating'),
+              const SizedBox(height: 16.0),
+              const Text('Rating'),
               RatingBar.builder(
                 initialRating: 0,
                 minRating: 0,
                 direction: Axis.horizontal,
                 allowHalfRating: true,
                 itemCount: 5,
-                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                itemBuilder: (context, _) => Icon(
+                itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                itemBuilder: (context, _) => const Icon(
                   Icons.star,
                   color: Colors.amber,
                 ),
                 onRatingUpdate: (rating) {
-                  _rating = rating;
+                  rating = rating;
                 },
               ),
             ],
@@ -46,24 +47,31 @@ void showAddReviewDialog(BuildContext context, String placeId) {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('Cancel'),
+            child: const Text('Salir'),
           ),
           ElevatedButton(
             onPressed: () async {
               final user = FirebaseAuth.instance.currentUser;
               if (user != null) {
+                // Fetch the user's name from Firestore
+                final userDoc = await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(user.uid)
+                    .get();
+                final userName = userDoc['name'];
+
                 await FirebaseFirestore.instance.collection('reviews').add({
                   'place_id': placeId,
-                  'user': user.email,
-                  'comment': _reviewController.text,
-                  'rating': _rating,
+                  'user': userName, // Use the user's name instead of email
+                  'comment': reviewController.text,
+                  'rating': rating,
                   'timestamp': FieldValue.serverTimestamp(),
                 });
-                _reviewController.clear();
-                Navigator.pop(context);
+                reviewController.clear();
+                onReviewSubmitted();
               }
             },
-            child: Text('Submit Review'),
+            child: const Text('Submit Review'),
           ),
         ],
       );
