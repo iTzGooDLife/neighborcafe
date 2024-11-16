@@ -6,40 +6,43 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 void showAddReviewDialog(
     BuildContext context, String placeId, VoidCallback onReviewSubmitted) {
   final TextEditingController reviewController = TextEditingController();
-  double rating = 0.0;
+  double ratingState = 0.0;
 
   showDialog(
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: const Text('Añadir una review'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextField(
-                controller: reviewController,
-                decoration: const InputDecoration(labelText: 'Review'),
-              ),
-              const SizedBox(height: 16.0),
-              const Text('Rating'),
-              RatingBar.builder(
-                initialRating: 0,
-                minRating: 0,
-                direction: Axis.horizontal,
-                allowHalfRating: true,
-                itemCount: 5,
-                itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                itemBuilder: (context, _) => const Icon(
-                  Icons.star,
-                  color: Colors.amber,
+        title: const Center(child: Text('Añadir una review')),
+        content: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.8,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextField(
+                  controller: reviewController,
+                  decoration: const InputDecoration(labelText: 'Review'),
                 ),
-                onRatingUpdate: (rating) {
-                  rating = rating;
-                },
-              ),
-            ],
+                const SizedBox(height: 16.0),
+                const Text('Rating'),
+                RatingBar.builder(
+                  initialRating: 0,
+                  minRating: 0,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, _) => const Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: (rating) {
+                    ratingState = rating;
+                  },
+                ),
+              ],
+            ),
           ),
         ),
         actions: [
@@ -64,7 +67,7 @@ void showAddReviewDialog(
                   'place_id': placeId,
                   'user': userName, // Use the user's name instead of email
                   'comment': reviewController.text,
-                  'rating': rating,
+                  'rating': ratingState,
                   'timestamp': FieldValue.serverTimestamp(),
                 });
                 reviewController.clear();
