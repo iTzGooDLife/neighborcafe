@@ -6,6 +6,7 @@ import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
+import '../../components/review_dialog.dart'; // Import the new file
 
 class StarRating extends StatelessWidget {
   final double rating;
@@ -206,7 +207,7 @@ class _MapViewState extends State<MapView> {
 
     if (place['photos'] != null && place['photos'].isNotEmpty) {
       imageUrl =
-          'https://maps.googleapis.com/maps/api/place/photo?maxwidth=350&photoreference=${place['photos'][0]['photo_reference']}&key=$apiKey';
+          'https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place['photos'][0]['photo_reference']}&key=$apiKey';
     } else {
       // Fetch a random coffee image from Unsplash
       final response = await http.get(Uri.parse(
@@ -236,17 +237,6 @@ class _MapViewState extends State<MapView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: Text(
-                    place['name'] ?? 'No name available',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(height: 8.0),
-                Center(
-                  child: Text(place['vicinity'] ?? 'No address available'),
-                ),
-                SizedBox(height: 8.0),
-                Center(
                   child: Image.network(
                     imageUrl,
                     fit: BoxFit.cover,
@@ -260,14 +250,72 @@ class _MapViewState extends State<MapView> {
                 ),
                 SizedBox(height: 8.0),
                 Center(
+                  child: Text(
+                    place['name'] ?? 'No name available',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(height: 8.0),
+                Center(
+                  child: Text(place['vicinity'] ?? 'No address available'),
+                ),
+                SizedBox(height: 8.0),
+                Center(
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       StarRating(rating: place['rating'] ?? 0),
-                      Text(place['rating'] != null
-                          ? ' (${place['rating'].toString()})'
-                          : ' (No rating)'),
+                      SizedBox(width: 4.0),
+                      Text(
+                        place['rating'] != null
+                            ? ' (${place['rating'].toString()})'
+                            : ' (No rating)',
+                      ),
                     ],
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                Center(
+                  child: Text(
+                    'Reviews',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('reviews')
+                      .where('place_id', isEqualTo: place['place_id'])
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return const Center(
+                          child: Text('No existen reviews todavía'));
+                    }
+                    final reviews = snapshot.data!.docs;
+                    return Column(
+                      children: reviews.map((review) {
+                        return Card(
+                          child: ListTile(
+                            title: Text(review['user']),
+                            subtitle: Text(review['comment']),
+                            trailing: StarRating(rating: review['rating']),
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  },
+                ),
+                SizedBox(height: 16.0),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      showAddReviewDialog(
+                          context, place['place_id']); // Open the review dialog
+                    },
+                    child: Text('Da tu opinión'),
                   ),
                 ),
               ],
