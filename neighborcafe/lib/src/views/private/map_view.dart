@@ -5,7 +5,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'dart:developer';
 import 'dart:convert';
 
 class StarRating extends StatelessWidget {
@@ -261,7 +260,15 @@ class _MapViewState extends State<MapView> {
                 ),
                 SizedBox(height: 8.0),
                 Center(
-                  child: StarRating(rating: place['rating'] ?? 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      StarRating(rating: place['rating'] ?? 0),
+                      Text(place['rating'] != null
+                          ? ' (${place['rating'].toString()})'
+                          : ' (No rating)'),
+                    ],
+                  ),
                 ),
               ],
             ),
