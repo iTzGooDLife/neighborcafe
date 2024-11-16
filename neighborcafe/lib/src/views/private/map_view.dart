@@ -6,7 +6,8 @@ import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
-import '../../components/review_dialog.dart'; // Import the new file
+import 'dart:async';
+import '../../components/review_dialog.dart';
 
 class StarRating extends StatelessWidget {
   final double rating;
@@ -222,6 +223,27 @@ class _MapViewState extends State<MapView> {
       }
     }
 
+    // Pre-fetch the image
+    final image = NetworkImage(imageUrl);
+    final completer = Completer<void>();
+    final imageStream = image.resolve(ImageConfiguration());
+    final listener =
+        ImageStreamListener((ImageInfo info, bool synchronousCall) {
+      completer.complete();
+    }, onError: (dynamic error, StackTrace? stackTrace) {
+      completer.completeError(error);
+    });
+    imageStream.addListener(listener);
+
+    try {
+      await completer.future;
+    } catch (e) {
+      print('Error loading image: $e');
+    } finally {
+      imageStream.removeListener(listener);
+    }
+
+    // Open the modal bottom sheet after the image has loaded
     showModalBottomSheet(
       context: context,
       isScrollControlled: true, // Allows the bottom sheet to take up more space
@@ -237,15 +259,23 @@ class _MapViewState extends State<MapView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
-                  child: Image.network(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Image.asset(
-                        'assets/placeholder_image.png', // Path to your placeholder image
-                        fit: BoxFit.cover,
-                      );
-                    },
+                  child: ClipRRect(
+                    borderRadius:
+                        BorderRadius.circular(16.0), // Smooth border radius
+                    child: Image.network(
+                      imageUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                              16.0), // Smooth border radius for placeholder
+                          child: Image.asset(
+                            'assets/placeholder_image.png', // Path to your placeholder image
+                            fit: BoxFit.cover,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
                 SizedBox(height: 8.0),
@@ -260,26 +290,52 @@ class _MapViewState extends State<MapView> {
                   child: Text(place['vicinity'] ?? 'No address available'),
                 ),
                 SizedBox(height: 8.0),
-                Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      StarRating(rating: place['rating'] ?? 0),
-                      SizedBox(width: 4.0),
-                      Text(
-                        place['rating'] != null
-                            ? ' (${place['rating'].toString()})'
-                            : ' (No rating)',
+                StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('reviews')
+                      .where('place_id', isEqualTo: place['place_id'])
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return Center(
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            StarRating(rating: 0),
+                            SizedBox(width: 4.0),
+                            Text(
+                              ' (No ha sido calificado)',
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    final reviews = snapshot.data!.docs;
+                    double averageRating = reviews
+                            .map((review) => review['rating'])
+                            .reduce((a, b) => a + b) /
+                        reviews.length;
+                    return Center(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          StarRating(rating: averageRating),
+                          SizedBox(width: 4.0),
+                          Text(
+                            ' (${averageRating.toStringAsFixed(1)})',
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
                 SizedBox(height: 16.0),
-                Center(
-                  child: Text(
-                    'Reviews',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
+                Text(
+                  'Reviews',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
@@ -291,8 +347,7 @@ class _MapViewState extends State<MapView> {
                       return Center(child: CircularProgressIndicator());
                     }
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      return const Center(
-                          child: Text('No existen reviews todavía'));
+                      return Center(child: Text('No reviews yet.'));
                     }
                     final reviews = snapshot.data!.docs;
                     return Column(
@@ -312,10 +367,13 @@ class _MapViewState extends State<MapView> {
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      showAddReviewDialog(
-                          context, place['place_id']); // Open the review dialog
+                      showAddReviewDialog(context, place['place_id'], () {
+                        if (mounted) {
+                          Navigator.pop(context);
+                        }
+                      });
                     },
-                    child: Text('Da tu opinión'),
+                    child: Text('Add a Review'),
                   ),
                 ),
               ],
