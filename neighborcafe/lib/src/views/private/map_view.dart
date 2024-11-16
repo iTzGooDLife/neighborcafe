@@ -8,6 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 import 'dart:async';
 import '../../components/review_dialog.dart';
+import 'package:logger/logger.dart';
 
 class StarRating extends StatelessWidget {
   final double rating;
@@ -72,6 +73,7 @@ class MapView extends StatefulWidget {
 class MapViewState extends State<MapView> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
+  final Logger _logger = Logger();
   User? loggedinUser; // Cambia a User? para permitir valores nulos
   String? username;
 
@@ -97,7 +99,7 @@ class MapViewState extends State<MapView> {
       await getUsername(user.uid);
     } else {
       // Manejar caso donde el usuario no está autenticado
-      print("No user is currently logged in.");
+      _logger.e("No user is currently logged in.");
     }
   }
 
@@ -112,7 +114,7 @@ class MapViewState extends State<MapView> {
         });
       }
     } catch (e) {
-      print('Error getting username: $e');
+      _logger.e('Error getting username: $e');
     }
   }
 
@@ -155,7 +157,7 @@ class MapViewState extends State<MapView> {
         _mapController?.animateCamera(CameraUpdate.newLatLng(_initialPosition));
       }
     } catch (e) {
-      print('Error getting location: $e');
+      _logger.e('Error getting location: $e');
     }
   }
 
@@ -198,10 +200,10 @@ class MapViewState extends State<MapView> {
           });
         }
       } else {
-        print('Failed to load places: ${response.statusCode}');
+        _logger.w('Failed to load places: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error fetching nearby cafes: $e');
+      _logger.e('Error fetching nearby cafes: $e');
     }
   }
 
@@ -241,7 +243,7 @@ class MapViewState extends State<MapView> {
     try {
       await completer.future;
     } catch (e) {
-      print('Error loading image: $e');
+      _logger.e('Error loading image: $e');
     } finally {
       imageStream.removeListener(listener);
     }
