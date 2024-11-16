@@ -339,9 +339,11 @@ class MapViewState extends State<MapView> {
                   },
                 ),
                 const SizedBox(height: 16.0),
-                const Text(
-                  'Reviews',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                const Center(
+                  child: Text(
+                    'Reviews',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
@@ -353,7 +355,9 @@ class MapViewState extends State<MapView> {
                       return const Center(child: CircularProgressIndicator());
                     }
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      return const Center(child: Text('No reviews yet.'));
+                      return const Center(
+                          child:
+                              Text('No hay reviews todavía. ¡Sé el primero!'));
                     }
                     final reviews = snapshot.data!.docs;
                     return Column(
@@ -379,7 +383,7 @@ class MapViewState extends State<MapView> {
                         }
                       });
                     },
-                    child: const Text('Add a Review'),
+                    child: const Text('Añadir una review'),
                   ),
                 ),
               ],

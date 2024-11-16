@@ -74,7 +74,7 @@ void showAddReviewDialog(
                 onReviewSubmitted();
               }
             },
-            child: const Text('Submit Review'),
+            child: const Text('Añadir tu review'),
           ),
         ],
       );
