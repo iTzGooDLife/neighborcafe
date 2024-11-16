@@ -14,8 +14,11 @@ class StarRating extends StatelessWidget {
   final int starCount;
   final Color color;
 
-  StarRating(
-      {this.rating = 0.0, this.starCount = 5, this.color = Colors.amber});
+  const StarRating(
+      {super.key,
+      this.rating = 0.0,
+      this.starCount = 5,
+      this.color = Colors.amber});
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +66,10 @@ class MapView extends StatefulWidget {
   const MapView({super.key});
 
   @override
-  _MapViewState createState() => _MapViewState();
+  MapViewState createState() => MapViewState();
 }
 
-class _MapViewState extends State<MapView> {
+class MapViewState extends State<MapView> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   User? loggedinUser; // Cambia a User? para permitir valores nulos
