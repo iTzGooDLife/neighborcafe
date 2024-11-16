@@ -5,8 +5,58 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
+import 'dart:developer';
 import 'dart:convert';
+
+class StarRating extends StatelessWidget {
+  final double rating;
+  final int starCount;
+  final Color color;
+
+  StarRating(
+      {this.rating = 0.0, this.starCount = 5, this.color = Colors.amber});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(starCount, (index) {
+        double fractionalPart = rating - index;
+        if (fractionalPart >= 1) {
+          return Icon(Icons.star, color: color);
+        } else if (fractionalPart > 0) {
+          return Stack(
+            children: [
+              Icon(Icons.star_border, color: color),
+              ClipRect(
+                clipper: _StarClipper(fractionalPart),
+                child: Icon(Icons.star, color: color),
+              ),
+            ],
+          );
+        } else {
+          return Icon(Icons.star_border, color: color);
+        }
+      }),
+    );
+  }
+}
+
+class _StarClipper extends CustomClipper<Rect> {
+  final double fraction;
+
+  _StarClipper(this.fraction);
+
+  @override
+  Rect getClip(Size size) {
+    return Rect.fromLTRB(0, 0, size.width * fraction, size.height);
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Rect> oldClipper) {
+    return true;
+  }
+}
 
 class MapView extends StatefulWidget {
   const MapView({super.key});
@@ -151,7 +201,27 @@ class _MapViewState extends State<MapView> {
     }
   }
 
-  void _showMarkerDetails(Map<String, dynamic> place) {
+  void _showMarkerDetails(Map<String, dynamic> place) async {
+    final apiKey = await _getApiKey();
+    String imageUrl;
+
+    if (place['photos'] != null && place['photos'].isNotEmpty) {
+      imageUrl =
+          'https://maps.googleapis.com/maps/api/place/photo?maxwidth=350&photoreference=${place['photos'][0]['photo_reference']}&key=$apiKey';
+    } else {
+      // Fetch a random coffee image from Unsplash
+      final response = await http.get(Uri.parse(
+          'https://api.unsplash.com/photos/random?query=coffee&client_id=YOUR_UNSPLASH_API_KEY'));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        imageUrl = data['urls']['regular'];
+      } else {
+        // Fallback image if Unsplash API fails
+        imageUrl =
+            'https://pqs.pe/wp-content/uploads/2016/08/pqs-como-abrir-cafeteria.jpg';
+      }
+    }
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true, // Allows the bottom sheet to take up more space
@@ -161,19 +231,40 @@ class _MapViewState extends State<MapView> {
               0.9, // Adjust the height as needed
           width: MediaQuery.of(context).size.width, // Full width of the screen
           padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                place['name'],
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8.0),
-              Text(place['vicinity']),
-              SizedBox(height: 8.0),
-              Text('Rating: ${place['rating'] ?? 'N/A'}'),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Text(
+                    place['name'] ?? 'No name available',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(height: 8.0),
+                Center(
+                  child: Text(place['vicinity'] ?? 'No address available'),
+                ),
+                SizedBox(height: 8.0),
+                Center(
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        'assets/placeholder_image.png', // Path to your placeholder image
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: 8.0),
+                Center(
+                  child: StarRating(rating: place['rating'] ?? 0),
+                ),
+              ],
+            ),
           ),
         );
       },
