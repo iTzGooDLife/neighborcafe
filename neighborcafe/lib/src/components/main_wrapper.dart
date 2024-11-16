@@ -10,6 +10,8 @@ import '../services/routes.dart';
 import '../settings/app_colors.dart';
 import 'exit_confirmation.dart';
 
+import 'package:logger/logger.dart';
+
 class MainScreenWrapper extends StatefulWidget {
   const MainScreenWrapper({
     super.key,
@@ -24,6 +26,7 @@ class MainScreenWrapper extends StatefulWidget {
 class _MainScreenWrapperState extends State<MainScreenWrapper> {
   int _selectedIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final Logger _logger = Logger();
 
   final List<Widget> screens = const [
     MapView(),
@@ -47,6 +50,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
     try {
       final authService = Provider.of<AuthService>(context, listen: false);
       await authService.signOut();
+      _logger.i("User logged out successfully.");
 
       Navigator.pushNamedAndRemoveUntil(
         context,
@@ -54,9 +58,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
         (Route<dynamic> route) => false, // Elimina todas las rutas anteriores
       );
     } catch (e) {
-      // Manejo de errores al cerrar sesión
-      print('Error cerrando sesión: $e');
-      // Aquí podrías mostrar un mensaje al usuario, por ejemplo, un Snackbar
+      _logger.e("Error logging out: $e");
     }
   }
 
