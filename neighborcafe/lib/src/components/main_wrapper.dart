@@ -33,8 +33,8 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
 
   final List<String> titles = const [
     'Mapa',
-    'Recomendaciones',
-    'Tiendas online',
+    'Tips',
+    'Tiendas',
   ];
 
   void _onItemTapped(int index) {

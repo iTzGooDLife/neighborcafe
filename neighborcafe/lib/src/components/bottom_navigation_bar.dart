@@ -22,11 +22,11 @@ class BottomNavBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.coffee_outlined),
-          label: 'Recomendaciones',
+          label: 'Tips',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.shopping_bag_outlined),
-          label: 'Tiendas online',
+          label: 'Tiendas',
         ),
       ],
       currentIndex: selectedIndex,
