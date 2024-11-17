@@ -22,7 +22,7 @@ class BottomNavBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.coffee_outlined),
-          label: 'Tips',
+          label: 'CoffeeBot',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.shopping_bag_outlined),

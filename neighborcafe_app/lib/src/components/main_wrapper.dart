@@ -36,7 +36,7 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
 
   final List<String> titles = const [
     'Mapa',
-    'Tips',
+    'CoffeeBot',
     'Tiendas',
   ];
 
