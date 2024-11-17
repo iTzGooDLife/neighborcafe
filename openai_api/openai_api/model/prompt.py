@@ -3,7 +3,7 @@ from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 def generate_context(user: str) -> str:
     context =  f"""
     Perfil del usuario: 
-    Usuario: {user.username}
+    Usuario: {user}
     """
 
     return context
