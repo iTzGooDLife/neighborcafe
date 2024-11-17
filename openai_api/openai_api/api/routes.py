@@ -10,7 +10,7 @@ class ChatRequest(BaseModel):
     query: str
     chat_history: List[str]
 
-@router.post("/chatbot", response_model=str)
+@router.post("/chatbot", response_model=dict)
 async def chatbot(request: ChatRequest):
 
     result = conversation(request.user, request.query, request.chat_history)
