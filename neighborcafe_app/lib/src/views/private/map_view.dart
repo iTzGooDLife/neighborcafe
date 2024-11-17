@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:neighborcafe/src/settings/app_colors.dart';
 import 'dart:convert';
 import 'dart:async';
 import '../../components/review_dialog.dart';
@@ -260,6 +261,16 @@ class MapViewState extends State<MapView> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton(
+                    icon: Icon(Icons.close),
+                    color: AppColors.secondaryColor,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
                 Center(
                   child: ClipRRect(
                     borderRadius:
@@ -289,7 +300,9 @@ class MapViewState extends State<MapView> {
                   child: Text(
                     place['name'] ?? 'No name available',
                     style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.secondaryColor),
                   ),
                 ),
                 const SizedBox(height: 8.0),
@@ -343,7 +356,10 @@ class MapViewState extends State<MapView> {
                 const Center(
                   child: Text(
                     'Reviews',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.secondaryColor),
                   ),
                 ),
                 StreamBuilder<QuerySnapshot>(
@@ -386,7 +402,7 @@ class MapViewState extends State<MapView> {
                     },
                     child: const Text('Añadir una review'),
                   ),
-                ),
+                )
               ],
             ),
           ),
