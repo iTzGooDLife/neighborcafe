@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "openai-api"
+version = "0.1.0"
+description = ""
+authors = ["Ricardo <ricky_olalquiaga@hotmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
