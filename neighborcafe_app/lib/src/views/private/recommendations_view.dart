@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+import 'package:neighborcafe/src/settings/app_colors.dart';
 
 class RecommendationsView extends StatefulWidget {
   const RecommendationsView({super.key});
@@ -13,9 +17,10 @@ class _RecommendationsViewState extends State<RecommendationsView> {
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   User? loggedinUser; // Cambia a User? para permitir valores nulos
-  String? username;
+  String username = '';
   final TextEditingController _controller = TextEditingController();
   final List<String> _messages = [];
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -53,16 +58,50 @@ class _RecommendationsViewState extends State<RecommendationsView> {
     }
   }
 
-  void _sendMessage() {
+  Future<void> _sendMessage() async {
     if (_controller.text.isNotEmpty) {
       setState(() {
-        if (_messages.isEmpty) {
-          _messages.add("Este es un mensaje genérico de bienvenida.");
-        }
         _messages.add(_controller.text);
-        _controller.clear();
+        _isLoading = true;
       });
+
+      // Construir el cuerpo de la solicitud
+      final requestBody = {
+        'user': username,
+        'query': _controller.text,
+        'chat_history': _messages,
+      };
+
+      // Enviar el mensaje del usuario a la API de Python
+      final response = await http.post(
+        Uri.parse('http://10.0.2.2:5555/chatbot'),
+        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        body: jsonEncode(requestBody),
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(utf8.decode(response.bodyBytes));
+        setState(() {
+          _messages.add(responseData['response']);
+        });
+      } else {
+        print('Error: ${response.statusCode}');
+      }
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      _controller.clear();
     }
+  }
+
+  void _resetChat() {
+    setState(() {
+      _messages.clear();
+      _messages.add(
+          "¡Hola! Soy tu asistente virtual para darte recomendaciones sobre el café. ¡Pregúntamente lo que desees!");
+    });
   }
 
   @override
@@ -77,8 +116,10 @@ class _RecommendationsViewState extends State<RecommendationsView> {
               child: ListView.builder(
                 itemCount: _messages.length,
                 itemBuilder: (context, index) {
-                  bool isUserMessage = index !=
-                      0; // El primer mensaje es el mensaje de bienvenida
+                  bool isUserMessage =
+                      index != 0 && index % 2 != 0; // Mensajes del usuario
+                  bool isBotMessage =
+                      index != 0 && index % 2 == 0; // Mensajes del bot
                   return ListTile(
                     title: Row(
                       mainAxisAlignment: isUserMessage
@@ -91,15 +132,18 @@ class _RecommendationsViewState extends State<RecommendationsView> {
                                 vertical: 10, horizontal: 15),
                             decoration: BoxDecoration(
                               color: isUserMessage
-                                  ? Colors.blue
+                                  ? AppColors.secondaryColor
                                   : Colors.grey[300],
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
                               _messages[index],
                               style: TextStyle(
-                                color:
-                                    isUserMessage ? Colors.white : Colors.black,
+                                color: isUserMessage
+                                    ? Colors.white
+                                    : isBotMessage
+                                        ? Colors.black
+                                        : Colors.black,
                               ),
                             ),
                           ),
@@ -110,6 +154,10 @@ class _RecommendationsViewState extends State<RecommendationsView> {
                 },
               ),
             ),
+            if (_isLoading) // Mostrar el indicador de carga si _isLoading es true
+              Center(
+                child: CircularProgressIndicator(),
+              ),
             TextField(
               controller: _controller,
               decoration: InputDecoration(
@@ -117,9 +165,23 @@ class _RecommendationsViewState extends State<RecommendationsView> {
               ),
               onSubmitted: (value) => _sendMessage(),
             ),
-            ElevatedButton(
-              onPressed: _sendMessage,
-              child: Text('Enviar'),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: _sendMessage,
+                    child: Text('Enviar'),
+                  ),
+                ),
+                SizedBox(width: 10),
+                IconButton(
+                  onPressed: _resetChat,
+                  icon: Icon(Icons.refresh),
+                  color:
+                      AppColors.secondaryColor, // Color del icono de reinicio
+                ),
+              ],
             ),
           ],
         ),
