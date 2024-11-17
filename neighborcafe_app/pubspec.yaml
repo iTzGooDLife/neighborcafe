@@ -1,0 +1,45 @@
+name: neighborcafe
+description: "A new Flutter project."
+
+# Prevent accidental publishing to pub.dev.
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  http: ^1.2.2
+  google_maps_flutter: ^2.9.0
+  location: ^5.0.0
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  flutter_dotenv: ^5.1.0
+  flutter_localizations:
+    sdk: flutter
+  cloud_firestore: ^5.4.4
+  shared_preferences: ^2.3.2
+  provider: ^6.1.2
+  flutter:
+    sdk: flutter
+  flutter_secure_storage: ^9.2.2
+  url_launcher: ^6.2.1
+  flutter_rating_bar: ^4.0.0
+  logger: ^2.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Enable generation of localized Strings from arb files.
+  generate: true
+
+  assets:
+    # Add assets from the images directory to the application.
+    - assets/images/
+    - .env
