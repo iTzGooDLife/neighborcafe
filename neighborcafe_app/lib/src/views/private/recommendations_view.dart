@@ -1,8 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle, ByteData;
+import 'package:dio/dio.dart';
+import 'package:http/io_client.dart';
 
 import 'package:neighborcafe/src/settings/app_colors.dart';
 
@@ -89,18 +93,23 @@ class _RecommendationsViewState extends State<RecommendationsView> {
         'chat_history': _messages,
       };
 
-      // Enviar el mensaje del usuario a la API de Python
-      final response = await http.post(
-        Uri.parse('http://10.0.2.2:5555/chatbot'),
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(requestBody),
-      );
+      final ByteData data = await rootBundle.load('assets/certs/cert.pem');
+      SecurityContext context = SecurityContext.defaultContext;
+      context.setTrustedCertificatesBytes(data.buffer.asUint8List());
 
-      print(response.headers);
-      print(token);
+      HttpClient client = HttpClient(context: context);
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+
+      final ioClient = IOClient(client);
+
+      final response =
+          await ioClient.post(Uri.parse('https://10.0.2.2:5555/chatbot'),
+              headers: {
+                'Authorization': 'Bearer $token',
+                'Content-Type': 'application/json',
+              },
+              body: jsonEncode(requestBody));
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(utf8.decode(response.bodyBytes));
