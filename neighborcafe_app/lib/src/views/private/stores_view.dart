@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart'; // Importar url_launcher
 import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
 
 class StoresView extends StatefulWidget {
   const StoresView({super.key});
@@ -25,14 +26,8 @@ class _StoresViewState extends State<StoresView> {
   bool _showOnlyOnline = false;
 
   // Simulación de cargar datos desde JSON
-  void _loadData() {
-    String jsonString = '''
-    [
-      { "title": "Card 1", "description": "This is the description of card 1", "online": true, "link": "https://www.facebook.com" },
-      { "title": "Card 2", "description": "This is the description of card 2", "online": false, "link": "https://www.example.com/2" },
-      { "title": "Card 3", "description": "This is the description of card 3", "online": true, "link": "https://www.example.com/3" }
-    ]
-    ''';
+  void _loadData() async {
+    final String jsonString = await rootBundle.loadString('assets/cafes.json');
 
     final jsonData = json.decode(jsonString);
 
@@ -60,11 +55,11 @@ class _StoresViewState extends State<StoresView> {
   }
 
   _launchURL(String url) async {
-    final Uri _url = Uri.parse('https://flutter.dev');
-    if (await canLaunchUrl(_url)) {
-      await launchUrl(_url);
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     } else {
-      throw 'Could not launch $_url';
+      throw 'Could not launch $url';
     }
   }
 
@@ -114,7 +109,7 @@ class _StoresViewState extends State<StoresView> {
             child: ElevatedButton(
               onPressed: _toggleOnlineFilter,
               child: Text(
-                  _showOnlyOnline ? 'Mostrar Solo Online' : 'Mostrar Todos'),
+                  _showOnlyOnline ? 'Mostrar Todos' : 'Mostrar Solo Online'),
             ),
           ),
           // Lista de cards
@@ -141,7 +136,7 @@ class _StoresViewState extends State<StoresView> {
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 10),
-                              Text(card['description']),
+                              Text(card['address']),
                               const SizedBox(height: 10),
                               Text("Online: ${card['online'] ? 'Yes' : 'No'}",
                                   style:
@@ -149,12 +144,13 @@ class _StoresViewState extends State<StoresView> {
                             ],
                           ),
                         ),
-                        // Botón para abrir el link
-                        IconButton(
-                          icon: Icon(Icons.link),
-                          onPressed: () => _launchURL(card['link']),
-                          tooltip: 'Abrir enlace',
-                        ),
+                        // Botón para abrir el link 
+                        if (card['online'])
+                          IconButton(
+                            icon: const Icon(Icons.link),
+                            onPressed: () => _launchURL(card['link']),
+                            tooltip: 'Abrir enlace',
+                          ),
                       ],
                     ),
                   ),

@@ -1,0 +1,326 @@
+[
+    {
+        "title": "Nubesbar Hotel",
+        "address": "8 Nte. 579, P1, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.hotelnubesbar.com/"
+    },
+    {
+        "title": "Y@_Net Internet Ltda.- Cibercaf\u00e9, Certificados Registro Civil, Vi\u00f1a del Mar",
+        "address": "Arlegui 414, 5520000 Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://cibercafe.miemail.cl/"
+    },
+    {
+        "title": "Ossido Nero",
+        "address": "Lord Cochrane 282, 2580344 Valpara\u00edso, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "https://www.ossidonero.cl/"
+    },
+    {
+        "title": "Victoria di Faggioni",
+        "address": "3 Pte. 553, 2520136 Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.victoriadifaggioni.cl/"
+    },
+    {
+        "title": "Gelateria Carpe Diem",
+        "address": "Av. Libertad 910, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "Caf\u00e9 Rep\u00fablica",
+        "address": "Av. Playa Ancha 30, 2360422 Valpara\u00edso, Chile",
+        "online": true,
+        "link": "https://www.facebook.com/CafeRepublicaIndependiente"
+    },
+    {
+        "title": "Vitamin Service",
+        "address": "Pedro Montt 1746, 2362986 Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "Cafe de Iris",
+        "address": "P.\u00ba Atkinson 110, 2370796 Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "Starbucks",
+        "address": "Av Libertad 860 Vi\u00f1a del Mar Metropolitana de Santiago - Av. Libertad 860, 2520072 Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "https://www.starbucks.cl/"
+    },
+    {
+        "title": "Cupcakes the Shop",
+        "address": "7 Nte. 461, local 5, 2520109 Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.cupcakesvina.cl/"
+    },
+    {
+        "title": "Manzi Pasteleria",
+        "address": "5 Nte. 329, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "https://tiendalabrinbanqueteria.company.site/"
+    },
+    {
+        "title": "Bonafide",
+        "address": "2 Ote. 1180, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.bonafide.cl/"
+    },
+    {
+        "title": "Cafeter\u00eda InCafe",
+        "address": "Av. Libertad 50, 2520799 Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.instagram.com/Cafeteriaincafe"
+    },
+    {
+        "title": "Xurros Cafe",
+        "address": "14 Nte. 880, Local 88, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.xurros.com/"
+    },
+    {
+        "title": "Xurros Cafe",
+        "address": "Av. Libertad 1348, Local 252, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.xurros.com/"
+    },
+    {
+        "title": "Purolivo Olive Gourmet",
+        "address": "Arlegui 646, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.purolivo.cl/"
+    },
+    {
+        "title": "Big Tony's",
+        "address": "6 - 1/2 Ote. 270, 2531142 Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.bigtonys.cl/"
+    },
+    {
+        "title": "Locos X Vi\u00f1a Caf\u00e9",
+        "address": "Av. Valpara\u00edso 586, 2571539 Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "Bonjour Cr\u00eapes",
+        "address": "Pl. Vergara 142, 2571519 Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.facebook.com/bonjourcrepes"
+    },
+    {
+        "title": "PaniniCafe",
+        "address": "Arlegui 495, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.paninicafe.cl/"
+    },
+    {
+        "title": "Cafeteria Mazarin. Salon de t\u00e9",
+        "address": "Arlegui 228, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://facebook.com/cafeteria.mazarin"
+    },
+    {
+        "title": "Mangos Caf\u00e9",
+        "address": "Av. Valpara\u00edso 340, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "Pasteler\u00eda Tostadorato",
+        "address": "Traslavi\u00f1a 210, 2571527 Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "Cafe Repost",
+        "address": "Traslavi\u00f1a 222, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "https://www.instagram.com/repostcafe"
+    },
+    {
+        "title": "Caf\u00e9 Recreo",
+        "address": "Recreo - Jos\u00e9 Manuel Balmaceda 215, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "Be Coffee Re\u00f1aca",
+        "address": "Vicu\u00f1a Mackenna 426, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.becoffee.cl/"
+    },
+    {
+        "title": "Between Coffe",
+        "address": "Av. Borgo\u00f1o 14580, 2540154 Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "Xurros Cafe",
+        "address": "Vicu\u00f1a Mackenna 1050, Local 7, 2541222 Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.xurros.com/"
+    },
+    {
+        "title": "Fruttato Helados Artesanales",
+        "address": "Av Edmundo Eluchans 1850, 2200055 Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "Fotocafe",
+        "address": "Esmeralda 1111, 2361926 Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "PaniniCafe Sotomayor",
+        "address": "Sotomayor 55, 2361793 Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.paninicafe.cl/"
+    },
+    {
+        "title": "Chinchinero",
+        "address": "Urriola 377, 2370656 Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "Restaurante Girafinha da Melancia",
+        "address": "Vergara 198, 2510247 Conc\u00f3n, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "https://www.facebook.com/Las.Jiraffas"
+    },
+    {
+        "title": "Caf\u00e9 con Historia - Quilpu\u00e9",
+        "address": "An\u00edbal Pinto 698, 2421536 Quilpu\u00e9, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.facebook.com/cafeconhistoriaquilpue"
+    },
+    {
+        "title": "Caf\u00e9 Estaci\u00f3n Expresso",
+        "address": "Federico Err\u00e1zuriz 838, Quilpu\u00e9, Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "La Mela",
+        "address": "Victoria 757, 2460564 Villa Alemana, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://pastelerialamela.cl/"
+    },
+    {
+        "title": "Cafeteria Lumiere",
+        "address": "Blanco Encalada 291, 2260529 Quillota, Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "El Jardin Secreto Sadhana",
+        "address": "Av Principal 717, Puchuncav\u00ed, Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "\"Aromas bread and coffee\"",
+        "address": "Av. Dr. Guillermo Mucke 590, 2711214 Algarrobo, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.aromaspanycafe.cl/"
+    },
+    {
+        "title": "Beach house maitencillo",
+        "address": "Av. del Mar 3804, Puchuncav\u00ed, Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "Rudloff Coffee Haus",
+        "address": "Avenida Bah\u00eda Mansa 262 Algarrobo, 2710000 Valpara\u00edso, Algarrobo, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.facebook.com/rudloffhaus"
+    },
+    {
+        "title": "Bookafe La Calera",
+        "address": "Carrera 1075, 2290234 La Calera, Calera, Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "Law Coffee",
+        "address": "Arturo Prat 570, La Calera, Calera, Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "Tempo",
+        "address": "Av. del Mar 1560, Puchuncav\u00ed, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://facebook.com/tempo.mai"
+    },
+    {
+        "title": "Starbucks",
+        "address": "5 Nte. 112, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "https://www.starbucks.cl/"
+    },
+    {
+        "title": "Caba\u00f1as Ayen Maitencillo",
+        "address": "Av. del Mar 4336, Maitencillo, Puchuncav\u00ed, Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "Cafeteria Emporio don Matias",
+        "address": "Cachagua 288, 2060000 Zapallar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "https://www.cafeteriaemporiodonmatias.cl/"
+    },
+    {
+        "title": "Work/Caf\u00e9 Expresso",
+        "address": "Av. Valpara\u00edso 383, 2571493 Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "https://www.workcafe.cl/"
+    },
+    {
+        "title": "Cafe Con Cuento",
+        "address": "Almte. Montt 316, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "https://www.facebook.com/pages/category/Cafe/Cafeconcuentos-Cerro-Concepci%C3%B3n-1655119851431241/"
+    },
+    {
+        "title": "Caf\u00e9 Hesperia",
+        "address": "Victoria 2250, 2362992 Valpara\u00edso, Chile",
+        "online": false,
+        "link": "N/A"
+    },
+    {
+        "title": "Pincho Moruno Restaurant Espa\u00f1ol",
+        "address": "Av. Libertad 920, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.pinchomoruno.cl/"
+    },
+    {
+        "title": "Puro Caf\u00e9",
+        "address": "Edwards 301, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "https://purocafe.cl/"
+    },
+    {
+        "title": "Orme\u00f1o and orme\u00f1o Cia. Ltda.",
+        "address": "Cono Sur 4991 G\u00f3mez Carre\u00f1o Primer Sector, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "http://www.jorgeormeno.cl/"
+    },
+    {
+        "title": "Big Ben - Restaurant & Caf\u00e9",
+        "address": "Av. Valpara\u00edso 469, Vi\u00f1a del Mar, Valpara\u00edso, Chile",
+        "online": true,
+        "link": "https://es.foursquare.com/v/caf%C3%A9-big-ben/4c423125da3dc9281723cab9"
+    }
+]
