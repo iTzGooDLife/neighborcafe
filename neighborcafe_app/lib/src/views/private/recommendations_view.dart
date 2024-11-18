@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle, ByteData;
-import 'package:dio/dio.dart';
 import 'package:http/io_client.dart';
 
 import 'package:neighborcafe/src/settings/app_colors.dart';
