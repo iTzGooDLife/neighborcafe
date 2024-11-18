@@ -58,12 +58,29 @@ class _RecommendationsViewState extends State<RecommendationsView> {
     }
   }
 
+  Future<String?> getIdToken() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      return await user.getIdToken();
+    }
+    return null;
+  }
+
   Future<void> _sendMessage() async {
     if (_controller.text.isNotEmpty) {
       setState(() {
         _messages.add(_controller.text);
         _isLoading = true;
       });
+
+      String? token = await getIdToken();
+      if (token == null) {
+        print('Error: No se pudo obtener el token de ID');
+        setState(() {
+          _isLoading = false;
+        });
+        return;
+      }
 
       // Construir el cuerpo de la solicitud
       final requestBody = {
@@ -75,9 +92,15 @@ class _RecommendationsViewState extends State<RecommendationsView> {
       // Enviar el mensaje del usuario a la API de Python
       final response = await http.post(
         Uri.parse('http://10.0.2.2:5555/chatbot'),
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
         body: jsonEncode(requestBody),
       );
+
+      print(response.headers);
+      print(token);
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(utf8.decode(response.bodyBytes));
