@@ -11,59 +11,8 @@ import 'dart:async';
 import 'dart:math';
 import '../../components/review_dialog.dart';
 import 'package:logger/logger.dart';
-
-class StarRating extends StatelessWidget {
-  final double rating;
-  final int starCount;
-  final Color color;
-
-  const StarRating(
-      {super.key,
-      this.rating = 0.0,
-      this.starCount = 5,
-      this.color = Colors.amber});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(starCount, (index) {
-        double fractionalPart = rating - index;
-        if (fractionalPart >= 1) {
-          return Icon(Icons.star, color: color);
-        } else if (fractionalPart > 0) {
-          return Stack(
-            children: [
-              Icon(Icons.star_border, color: color),
-              ClipRect(
-                clipper: _StarClipper(fractionalPart),
-                child: Icon(Icons.star, color: color),
-              ),
-            ],
-          );
-        } else {
-          return Icon(Icons.star_border, color: color);
-        }
-      }),
-    );
-  }
-}
-
-class _StarClipper extends CustomClipper<Rect> {
-  final double fraction;
-
-  _StarClipper(this.fraction);
-
-  @override
-  Rect getClip(Size size) {
-    return Rect.fromLTRB(0, 0, size.width * fraction, size.height);
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Rect> oldClipper) {
-    return true;
-  }
-}
+import '../../components/reviews_stream.dart';
+import '../../components/star_rating.dart';
 
 class MapView extends StatefulWidget {
   const MapView({super.key});
@@ -183,7 +132,9 @@ class MapViewState extends State<MapView> {
       }
     }
   }
-  double _calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+
+  double _calculateDistance(
+      double lat1, double lon1, double lat2, double lon2) {
     const double earthRadius = 6371000; // Earth's radius in meters
     final dLat = _degreesToRadians(lat2 - lat1);
     final dLon = _degreesToRadians(lon2 - lon1);
@@ -197,7 +148,6 @@ class MapViewState extends State<MapView> {
 
     return earthRadius * c; // Distance in meters
   }
-
 
   double _degreesToRadians(double degrees) {
     return degrees * 3.14 / 180;
@@ -361,13 +311,13 @@ class MapViewState extends State<MapView> {
                       return const Center(child: CircularProgressIndicator());
                     }
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      return const Center(
+                      return Center(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             StarRating(rating: 0),
-                            SizedBox(width: 4.0),
-                            Text(
+                            const SizedBox(width: 4.0),
+                            const Text(
                               ' (No ha sido calificado)',
                             ),
                           ],
@@ -403,34 +353,7 @@ class MapViewState extends State<MapView> {
                         color: AppColors.secondaryColor),
                   ),
                 ),
-                StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('reviews')
-                      .where('place_id', isEqualTo: place['place_id'])
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      return const Center(
-                          child:
-                              Text('No hay reviews todavía. ¡Sé el primero!'));
-                    }
-                    final reviews = snapshot.data!.docs;
-                    return Column(
-                      children: reviews.map((review) {
-                        return Card(
-                          child: ListTile(
-                            title: Text(review['user']),
-                            subtitle: Text(review['comment']),
-                            trailing: StarRating(rating: review['rating']),
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  },
-                ),
+                ReviewsStream(placeId: place['place_id']),
                 const SizedBox(height: 16.0),
                 Center(
                   child: ElevatedButton(
