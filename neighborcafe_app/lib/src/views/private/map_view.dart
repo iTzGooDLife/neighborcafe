@@ -8,6 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:neighborcafe/src/settings/app_colors.dart';
 import 'dart:convert';
 import 'dart:async';
+import 'dart:math';
 import '../../components/review_dialog.dart';
 import 'package:logger/logger.dart';
 
@@ -72,6 +73,8 @@ class MapView extends StatefulWidget {
 }
 
 class MapViewState extends State<MapView> {
+  StreamSubscription<LocationData>? _locationSubscription;
+
   final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
   final Logger _logger = Logger();
@@ -149,17 +152,55 @@ class MapViewState extends State<MapView> {
 
     try {
       LocationData currentLocation = await _location.getLocation();
-      if (currentLocation.latitude != null &&
-          currentLocation.longitude != null) {
-        setState(() {
-          _initialPosition =
-              LatLng(currentLocation.latitude!, currentLocation.longitude!);
-        });
-        _mapController?.animateCamera(CameraUpdate.newLatLng(_initialPosition));
-      }
+      _updateLocationAndSearch(currentLocation);
+
+      _locationSubscription =
+          _location.onLocationChanged.listen((LocationData newLocation) {
+        _updateLocationAndSearch(newLocation);
+      });
     } catch (e) {
       _logger.e('Error getting location: $e');
     }
+  }
+
+  void _updateLocationAndSearch(LocationData location) {
+    if (location.latitude != null && location.longitude != null) {
+      final newPosition = LatLng(location.latitude!, location.longitude!);
+
+      final distance = _calculateDistance(
+        _initialPosition.latitude,
+        _initialPosition.longitude,
+        newPosition.latitude,
+        newPosition.longitude,
+      );
+
+      if (distance > 10) {
+        setState(() {
+          _initialPosition = newPosition;
+        });
+        _mapController?.animateCamera(CameraUpdate.newLatLng(newPosition));
+        _searchNearbyCafes();
+      }
+    }
+  }
+  double _calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    const double earthRadius = 6371000; // Earth's radius in meters
+    final dLat = _degreesToRadians(lat2 - lat1);
+    final dLon = _degreesToRadians(lon2 - lon1);
+
+    final a = sin(dLat / 2) * sin(dLat / 2) +
+        cos(_degreesToRadians(lat1)) *
+            cos(_degreesToRadians(lat2)) *
+            sin(dLon / 2) *
+            sin(dLon / 2);
+    final c = 2 * atan2(sqrt(a), sqrt(1 - a));
+
+    return earthRadius * c; // Distance in meters
+  }
+
+
+  double _degreesToRadians(double degrees) {
+    return degrees * 3.14 / 180;
   }
 
   Future<String> _getApiKey() async {
@@ -264,7 +305,7 @@ class MapViewState extends State<MapView> {
                 Align(
                   alignment: Alignment.topRight,
                   child: IconButton(
-                    icon: Icon(Icons.close),
+                    icon: const Icon(Icons.close),
                     color: AppColors.secondaryColor,
                     onPressed: () {
                       Navigator.pop(context);
@@ -433,18 +474,6 @@ class MapViewState extends State<MapView> {
                   myLocationButtonEnabled: true,
                   markers: _markers,
                 ),
-          Positioned(
-            bottom: 16,
-            left: 70,
-            right: 70,
-            child: ElevatedButton(
-              onPressed: _searchNearbyCafes,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-              ),
-              child: const Text('Buscar cafeterías cercanas'),
-            ),
-          ),
         ],
       ),
     );
@@ -452,6 +481,7 @@ class MapViewState extends State<MapView> {
 
   @override
   void dispose() {
+    _locationSubscription?.cancel();
     _mapController?.dispose();
     super.dispose();
   }
