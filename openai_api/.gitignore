@@ -5,7 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
-
+neighbor-cafe-firebase-adminsdk.json
 # Distribution / packaging
 .Python
 build/
