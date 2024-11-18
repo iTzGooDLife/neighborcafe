@@ -9,4 +9,10 @@ app = FastAPI()
 app.include_router(router)
 
 def main():
-    uvicorn.run(app, host="127.0.0.1", port=5555)
+    uvicorn.run(
+        app, 
+        host="127.0.0.1", 
+        port=5555,
+        ssl_keyfile="certs/key.pem",
+        ssl_certfile="certs/cert.pem"
+        )
