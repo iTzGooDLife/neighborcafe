@@ -103,13 +103,22 @@ class _StoresViewState extends State<StoresView> {
     return Scaffold(
       body: Column(
         children: [
-          // Botón para activar/desactivar el filtro
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: _toggleOnlineFilter,
-              child: Text(
-                  _showOnlyOnline ? 'Mostrar Todos' : 'Mostrar Solo Online'),
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(_showOnlyOnline ? 'Mostrar Solo Online' : 'Mostrar Todos'),
+                Switch(
+                  value: _showOnlyOnline,
+                  onChanged: (bool value) {
+                    _toggleOnlineFilter();
+                  },
+                  activeColor: const Color(0xFFE4981E),
+                  inactiveThumbColor: const Color(0xFF04474B),
+                  inactiveTrackColor: const Color(0xFF88BCC2),
+                ),
+              ],
             ),
           ),
           // Lista de cards
