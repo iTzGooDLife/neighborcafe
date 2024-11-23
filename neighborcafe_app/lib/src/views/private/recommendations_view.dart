@@ -101,13 +101,13 @@ class _RecommendationsViewState extends State<RecommendationsView> {
 
       final ioClient = IOClient(client);
 
-      final response =
-          await ioClient.post(Uri.parse('https://10.0.2.2:5555/chatbot'),
-              headers: {
-                'Authorization': 'Bearer $token',
-                'Content-Type': 'application/json',
-              },
-              body: jsonEncode(requestBody));
+      final response = await ioClient.post(
+          Uri.parse('https://neighborcafe.greeze.cl/chatbot'),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode(requestBody));
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(utf8.decode(response.bodyBytes));
