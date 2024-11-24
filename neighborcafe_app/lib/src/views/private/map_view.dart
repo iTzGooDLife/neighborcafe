@@ -36,6 +36,7 @@ class MapViewState extends State<MapView> {
   final Location _location = Location();
 
   final Set<Marker> _markers = {};
+
   @override
   void initState() {
     super.initState();
@@ -199,6 +200,28 @@ class MapViewState extends State<MapView> {
     }
   }
 
+  Future<void> handleFavorite(Map<String, dynamic> place, String? photoUrl) async {
+    final favoritesCollection = _firestore.collection('favorites');
+    final querySnapshot = await favoritesCollection
+        .where('user', isEqualTo: username)
+        .where('place_id', isEqualTo: place["place_id"])
+        .get();
+
+    if (querySnapshot.docs.isEmpty) {
+      await favoritesCollection.add({
+        'place_address': place['vicinity'],
+        'place_id': place["place_id"],
+        'place_name': place['name'],
+        'place_photoUrl': photoUrl,
+        'user': username,
+      });
+    } else {
+      for (var doc in querySnapshot.docs) {
+        await doc.reference.delete();
+      }
+    }
+  }
+
   void _showMarkerDetails(Map<String, dynamic> place) async {
     final apiKey = await _getApiKey();
     String imageUrl;
@@ -288,12 +311,39 @@ class MapViewState extends State<MapView> {
                 ),
                 const SizedBox(height: 8.0),
                 Center(
-                  child: Text(
-                    place['name'] ?? 'No name available',
-                    style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.secondaryColor),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        place['name'] ?? 'No name available',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.secondaryColor,
+                        ),
+                      ),
+                      const SizedBox(width: 8.0),
+                      StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('favorites')
+                            .where('user', isEqualTo: username)
+                            .where('place_id', isEqualTo: place['place_id'])
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          final isFavorite = snapshot.hasData && snapshot.data!.docs.isNotEmpty;
+
+                          return IconButton(
+                            icon: Icon(
+                              isFavorite ? Icons.favorite : Icons.favorite_border,
+                              color: isFavorite ? Colors.red : Colors.grey,
+                            ),
+                            onPressed: () {
+                              handleFavorite(place, imageUrl);
+                            },
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 8.0),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:neighborcafe/src/views/private/favorites_view.dart';
 import 'bottom_navigation_bar.dart';
 import '../views/private/map_view.dart';
 import '../views/private/recommendations_view.dart';
@@ -31,12 +32,14 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
   final List<Widget> screens = const [
     MapView(),
     RecommendationsView(),
+    FavoritesView(),
     StoresView(),
   ];
 
   final List<String> titles = const [
     'Mapa',
     'CoffeeBot',
+    'Favoritos',
     'Tiendas',
   ];
 
@@ -65,11 +68,18 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
   @override
   Widget build(BuildContext context) {
     return ExitConfirmationWrapper(
-      isDrawerOpen: () => _scaffoldKey.currentState?.isEndDrawerOpen ?? false,
+      isDrawerOpen: () => _scaffoldKey.currentState?.isDrawerOpen ?? false,
       child: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
           automaticallyImplyLeading: false,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+              color: Colors.white,
+            ),
+          ),
           title: Row(
             children: [
               Image.asset(
@@ -82,18 +92,8 @@ class _MainScreenWrapperState extends State<MainScreenWrapper> {
                       fontWeight: FontWeight.bold, fontSize: 20.0)),
             ],
           ),
-          actions: <Widget>[
-            Builder(
-              builder: (context) => IconButton(
-                icon: const Icon(Icons.menu),
-                // onPressed: () => Scaffold.of(context).openEndDrawer(),
-                onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
-                color: Colors.white,
-              ),
-            ),
-          ],
         ),
-        endDrawer: Drawer(
+        drawer: Drawer(
           child: Container(
             color: AppColors.backgroundColor,
             child: ListView(

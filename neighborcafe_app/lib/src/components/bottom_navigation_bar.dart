@@ -25,6 +25,10 @@ class BottomNavBar extends StatelessWidget {
           label: 'CoffeeBot',
         ),
         BottomNavigationBarItem(
+          icon: Icon(Icons.favorite_border),
+          label: 'Favoritos',  
+        ),
+        BottomNavigationBarItem(
           icon: Icon(Icons.shopping_bag_outlined),
           label: 'Tiendas',
         ),
